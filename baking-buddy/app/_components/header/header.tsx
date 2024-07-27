@@ -18,17 +18,25 @@ const Header = () => {
           <Link href="/signup" className="hover:text-primary" prefetch={false}>
             회원가입
           </Link>
+          {/* <Link href="/recipes/users/${user.id}" className="hover:text-primary" prefetch={true}> */}
+          <Link href="/recipes/users/1" className="hover:text-primary" prefetch={true}>
+            내 레시피
+          </Link>
         </nav>
         <div className="flex items-center space-x-4">
-          <Link href="#" className="hover:text-primary" prefetch={false}>
+          {/* 검색 아이콘 */}
+          <Link href="/search" className="hover:text-primary" prefetch={false}>
             <SearchIcon className="h-6 w-6" />
           </Link>
+
+          {/* 프로필 아이콘*/}
           <Link href="/mypage" className="hover:text-primary" prefetch={false}>
             <Avatar className="h-8 w-8 border">
               <AvatarImage src="/placeholder-user.jpg" />
               <AvatarFallback>AB</AvatarFallback>
             </Avatar>
           </Link>
+
         </div>
       </div>
     </header>
