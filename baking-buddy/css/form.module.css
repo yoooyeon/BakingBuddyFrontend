@@ -1,0 +1,102 @@
+.form {
+  max-width: 500px;
+  margin: auto;
+  padding: 24px;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.imageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profileImage {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.fileInput {
+  margin-top: 10px;
+}
+
+.inputGroup {
+  margin-bottom: 16px;
+}
+
+.label {
+  display: block;
+  color: #4a5568;
+  margin-bottom: 8px;
+}
+
+.input {
+  margin-top: 4px;
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  width: 100%;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.5);
+}
+
+.button,
+.submitButton {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.button {
+  background-color: #4299e1;
+  color: white;
+}
+
+.button:hover {
+  background-color: #3182ce;
+}
+
+.submitButton {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.submitButton:hover {
+  background-color: #4338ca;
+}
+
+.submitButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
+}
+
+.linkContainer {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.link {
+  color: #4299e1;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
