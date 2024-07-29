@@ -29,6 +29,7 @@ const UserProfile = () => {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: 'include'
         });
         if (response.ok) {
           const json = await response.json();
@@ -77,6 +78,7 @@ const UserProfile = () => {
 
       const response = await fetch(`http://localhost:8080/api/users/${userId}`, {
         method: "PUT",
+        credentials: 'include',
         body: formData,
       });
 

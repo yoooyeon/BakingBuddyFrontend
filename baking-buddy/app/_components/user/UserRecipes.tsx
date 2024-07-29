@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from "next/navigation";
-import Directory from './Directory';
+import Directory from '../recipe/Directory';
 
 interface RecipeResponseDto {
   id: number;
@@ -30,11 +30,18 @@ const UserRecipes = () => {
     if (userId) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://localhost:8080/api/recipes/users/${userId}`);
+          const response = await fetch(`http://localhost:8080/api/users/${userId}/recipes`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include', // 쿠키를 요청에 포함시키기 위한 설정
+          });
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }
-          const data = await response.json();
+          const json = await response.json();
+          const data = json.data;
           console.log("Fetched data:", data); // Log the fetched data to check its structure
           // Ensure the data is an array
           if (Array.isArray(data)) {
@@ -59,8 +66,7 @@ const UserRecipes = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">My Recipes</h1>
+    <div className="container mx-auto p-4 m-4">
       {directories.map((directory) => (
         <Directory key={directory.dirId} directory={directory} />
       ))}

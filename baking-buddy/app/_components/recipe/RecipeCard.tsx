@@ -8,24 +8,26 @@ interface RecipeResponseDto {
   time: number;
   level: string;
   likeCount: number;
+  // username: string;
+
 }
 
 const RecipeCard = ({ recipe }: { recipe: RecipeResponseDto }) => {
   return (
-    <div className="border p-4 rounded shadow">
-      <img
-        src={recipe.recipeImageUrl}
-        alt={recipe.name}
-        className="w-full h-32 object-cover rounded mb-2"
-      />
-      <h3 className="text-lg font-bold">{recipe.name}</h3>
-      <p className="text-gray-600">{recipe.description}</p>
-      <p className="text-sm text-gray-500">Time: {recipe.time} mins | Level: {recipe.level}</p>
-      <p className="text-sm text-gray-500">Likes: {recipe.likeCount}</p>
-      <Link href={`/recipes/${recipe.id}`} prefetch={false} className="text-primary hover:underline">
-        View Recipe
-      </Link>
-    </div>
+    <div className="border-2 border-black-500 m-2 p-2">
+      <Link href={`/recipes/${recipe.id}`} prefetch={false}>
+        <img
+          src={recipe.recipeImageUrl}
+          alt={recipe.name}
+          className="w-full h-32 object-cover rounded mb-2"
+        />
+        <h3 className="text-lg font-bold">{recipe.name}</h3>
+        <p className="text-gray-600">{recipe.description}</p>
+        <p className="text-sm text-gray-500">Time: {recipe.time} mins | Level: {recipe.level}</p>
+        <p className="text-sm text-gray-500">Likes: {recipe.likeCount}</p>
+        {/* <p className="text-sm text-gray-500">username: {recipe.username}</p> */}
+
+      </Link></div>
   );
 };
 

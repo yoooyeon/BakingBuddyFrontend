@@ -39,6 +39,7 @@ export default function SignupPage() {
         headers: {
           "Content-Type": "application/json"
         },
+        credentials:'include',
         body: JSON.stringify(formData)
       });
 
@@ -58,7 +59,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <SignupForm
         formData={formData}

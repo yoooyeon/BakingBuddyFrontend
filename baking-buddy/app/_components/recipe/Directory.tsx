@@ -8,6 +8,7 @@ interface RecipeResponseDto {
   time: number;
   level: string;
   likeCount: number;
+  // username: string;
 }
 
 interface DirectoryWithRecipesResponseDto {

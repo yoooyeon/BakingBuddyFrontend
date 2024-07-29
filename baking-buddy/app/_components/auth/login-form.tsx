@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "../../../css/form.module.css";
+import { API_URL } from "@/app/constants";
+import { setCookie } from 'nookies';
+import { parseCookies } from 'nookies';
+
 export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -11,26 +15,38 @@ export default function LoginForm() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    
+
     try {
-      const response = await fetch(`http://localhost:8080/login`, { // Ensure protocol is included
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
+        credentials: 'include',
         body: JSON.stringify({ username, password })
       });
 
       if (response.ok) {
-        // If the response is OK, redirect to home page
-        router.push("/");
+        const json = await response.json();
+        const data = json.data;
+        setCookie(null, 'accessToken', data.accessToken, {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+          sameSite: 'None',
+        });
+
+        setCookie(null, 'refreshToken', data.refreshToken, {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+          sameSite: 'None',
+        });
+        router.push("/"); // 로그인 후 메인 페이지로 이동
+        window.location.reload(); // 페이지 리로드 추가
       } else {
-        // Handle errors if the response is not OK
         const result = await response.json();
         setError(result.message || "Invalid login credentials.");
       }
     } catch (error) {
-      // Handle network or other errors
       setError("An unexpected error occurred. Please try again.");
       console.error("Login error:", error);
     }
