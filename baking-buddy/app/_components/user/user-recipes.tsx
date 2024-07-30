@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from "next/navigation";
 import Directory from '../recipe/directory';
 import { API_URL } from '@/app/constants';
-// import directory from '../recipe/directory';
 
 interface RecipeResponseDto {
   id: number;
