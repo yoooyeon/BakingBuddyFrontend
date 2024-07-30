@@ -4,7 +4,7 @@ import { Table, TableBody, TableRow, TableCell } from "@/components/ui/table";
 
 interface Ingredient {
   name: string;
-//   amount: string;
+  amount: string;
 }
 
 interface IngredientsTableProps {
@@ -13,14 +13,14 @@ interface IngredientsTableProps {
 
 const IngredientsTable: React.FC<IngredientsTableProps> = ({ ingredients }) => {
   return (
-    <section>
-      <h3 className="text-lg font-semibold">재료</h3>
-      <Table>
+    <section className="p-4 bg-white rounded-lg shadow-md">
+      <h3 className="text-xl font-semibold border-b pb-2 mb-4">재료</h3>
+      <Table className="w-full border-separate border-spacing-0">
         <TableBody>
           {ingredients.map((ingredient, index) => (
-            <TableRow key={index}>
-              <TableCell>{ingredient.name}</TableCell>
-              {/* <TableCell className="text-right">{ingredient.amount}</TableCell> */}
+            <TableRow key={index} className="border-b last:border-b-0">
+              <TableCell className="py-2 px-4 text-sm text-gray-700">{ingredient.name}</TableCell>
+              <TableCell className="py-2 px-4 text-sm text-gray-500 text-right">{ingredient.amount}</TableCell>
             </TableRow>
           ))}
         </TableBody>

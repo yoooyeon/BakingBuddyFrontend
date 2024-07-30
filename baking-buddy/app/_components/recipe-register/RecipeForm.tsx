@@ -15,7 +15,6 @@ interface RecipeStep {
 export default function RecipeForm() {
     const [name, setName] = useState('');
     const [dirId, setDirId] = useState('');
-    const [userId, setUserId] = useState('1'); // 유저 ID는 실제 값으로 설정해야 합니다.
     const [description, setDescription] = useState('');
     const [openYn, setOpenYn] = useState('Y'); // 기본값 설정
     const [ingredients, setIngredients] = useState<string[]>([]);
@@ -30,9 +29,7 @@ export default function RecipeForm() {
 
         const recipeData = {
             name,
-            dirId: Number("1"),
-            userId: Number("1"),
-            // userId: Number(userId),
+            dirId: dirId,
             description,
             openYn,
             ingredients,
@@ -52,10 +49,6 @@ export default function RecipeForm() {
             formData.append('recipeImage', recipeImage, recipeImage.name);
         }
 
-        // FormData 내용 콘솔에 출력
-        formData.forEach((value, key) => {
-            console.log(key, value);
-        });
 
         try {
             const response = await fetch('http://localhost:8080/api/recipes', {
@@ -77,10 +70,6 @@ export default function RecipeForm() {
 
     return (
         <form id="recipeForm" className={styles.form} onSubmit={handleSubmit}>
-            <div className={styles.hiddenInput}>
-                <label htmlFor="userId" className={styles.label}>User ID</label>
-                <input type="text" className={styles.input} id="userId" name="userId" value={userId} readOnly />
-            </div>
             <DirectorySelect setDirId={setDirId} />
             <div className={styles.inputGroup}>
                 <label htmlFor="name" className={styles.label}>레시피 이름</label>

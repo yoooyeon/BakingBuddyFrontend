@@ -29,9 +29,6 @@ const Header = () => {
         <nav className="hidden space-x-4 md:flex">
           {isLoggedIn ? (
             <>
-              <Link href="/recipes/1" className="hover:text-primary" prefetch={false}>
-                레시피 상세 조회 예시
-              </Link>
               <Link href="/recipes/register" className="hover:text-primary" prefetch={false}>
                 레시피 등록하기
               </Link>
@@ -44,9 +41,7 @@ const Header = () => {
             </>
           ) : (
             <>
-              <Link href="/search" className="hover:text-primary" prefetch={false}>
-                <Search />
-              </Link>
+
               <Link href="/login" className="hover:text-primary" prefetch={false}>
                 로그인
               </Link>
@@ -55,6 +50,9 @@ const Header = () => {
               </Link>
             </>
           )}
+          <Link href="/search" className="hover:text-primary" prefetch={false}>
+            <Search />
+          </Link>
         </nav>
         {isLoggedIn && (
           <div className="flex items-center space-x-4">

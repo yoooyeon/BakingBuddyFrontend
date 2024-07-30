@@ -5,14 +5,17 @@ import { useParams } from 'next/navigation';
 const RecipeDetails = lazy(() => import('@/app/_components/recipe/RecipeDetail'));
 const IngredientsTable = lazy(() => import('@/app/_components/recipe/IngredientsTable'));
 const RecipeSteps = lazy(() => import('@/app/_components/recipe/RecipeSteps'));
-const Reviews = lazy(() => import('@/app/_components/recipe/Reviews'));
+// const Reviews = lazy(() => import('@/app/_components/recipe/Reviews'));
 
 interface Recipe {
   name: string;
   username: string;
   // views: number;
   likeCount: number;
+  level: string;
+  userLiked: boolean;
   // comments: number;
+  time: number;
   recipeImageUrl: string;
   ingredients: { name: string; amount: string }[];
   recipeSteps: { step: string; imageUrl: string }[];
@@ -75,14 +78,7 @@ export default function RecipeDetailPage() {
   return (
     <div className="max-w-2xl mx-auto p-4 space-y-4">
       <Suspense fallback={<h1>Loading recipe details...</h1>}>
-        <RecipeDetails
-          name={recipe.name}
-          username={recipe.username}
-          // views={recipe.views}
-          likeCount={recipe.likeCount}
-          // comments={recipe.comments}
-          recipeImageUrl={recipe.recipeImageUrl}
-        />
+        <RecipeDetails recipe={recipe} />
       </Suspense>
       <Suspense fallback={<h1>Loading ingredients...</h1>}>
         <IngredientsTable ingredients={recipe.ingredients || []} />
