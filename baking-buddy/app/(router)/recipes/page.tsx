@@ -1,5 +1,5 @@
 import { fetchRecipes } from '@/lib/api';
-import RecipeCard from '@/app/_components/recipe/RecipeCard';
+import RecipeCard from '@/app/_components/recipe/recipe-card';
 
 interface RecipeResponseDto {
   id: number;

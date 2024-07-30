@@ -1,6 +1,6 @@
 // app/recipes/users/[id]/page.tsx
 
-import UserRecipes from "@/app/_components/user/UserRecipes";
+import UserRecipes from "@/app/_components/user/user-recipes";
 
 
 const UserRecipesPage = () => {

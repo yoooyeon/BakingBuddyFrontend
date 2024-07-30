@@ -1,5 +1,5 @@
 // app/alarms/AlarmPage.tsx
-import AlarmComponent from '@/app/_components/alarm/AlarmComponent';
+import AlarmComponent from '@/app/_components/alarm/alarm';
 import { API_URL } from '@/app/constants';
 
 interface Alarm {

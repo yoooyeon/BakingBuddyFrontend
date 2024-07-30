@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from 'react';
-import DirectorySelect from './DirectorySelect';
+import DirectorySelect from './directory-select';
 import IngredientList from './IngredientList';
-import RecipeStepForm from './RecipeStepForm';
-import TagList from './TagList';
+import RecipeStepForm from './recipe-step-form';
+import TagList from './tag-list';
 import styles from '../../../css/form.module.css';
 
 interface RecipeStep {

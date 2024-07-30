@@ -1,4 +1,4 @@
-import RecipeCard from './RecipeCard';
+import RecipeCard from './recipe-card';
 
 interface RecipeResponseDto {
   id: number;

@@ -3,9 +3,9 @@ import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { useParams } from 'next/navigation';
 import Tag from '@/app/_components/recipe/tag';
 
-const RecipeDetails = lazy(() => import('@/app/_components/recipe/RecipeDetail'));
-const IngredientsTable = lazy(() => import('@/app/_components/recipe/IngredientsTable'));
-const RecipeSteps = lazy(() => import('@/app/_components/recipe/RecipeSteps'));
+const RecipeDetails = lazy(() => import('@/app/_components/recipe/recipe-detail'));
+const IngredientsTable = lazy(() => import('@/app/_components/recipe/ingredients-table'));
+const RecipeSteps = lazy(() => import('@/app/_components/recipe/recipe-steps'));
 interface Recipe {
   id: string;
   name: string;
