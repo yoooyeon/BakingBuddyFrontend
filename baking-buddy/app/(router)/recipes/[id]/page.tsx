@@ -1,12 +1,11 @@
 "use client";
 import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { useParams } from 'next/navigation';
+import Tag from '@/app/_components/recipe/tag';
 
 const RecipeDetails = lazy(() => import('@/app/_components/recipe/RecipeDetail'));
 const IngredientsTable = lazy(() => import('@/app/_components/recipe/IngredientsTable'));
 const RecipeSteps = lazy(() => import('@/app/_components/recipe/RecipeSteps'));
-// const Reviews = lazy(() => import('@/app/_components/recipe/Reviews'));
-
 interface Recipe {
   name: string;
   username: string;
@@ -17,8 +16,11 @@ interface Recipe {
   // comments: number;
   time: number;
   recipeImageUrl: string;
+  profileImageUrl: string;
   ingredients: { name: string; amount: string }[];
   recipeSteps: { step: string; imageUrl: string }[];
+  tags: { name: string }[];
+
   // reviews: { username: string; avatarUrl: string; rating: number; comment: string; timeAgo: string }[];
 }
 
@@ -86,9 +88,11 @@ export default function RecipeDetailPage() {
       <Suspense fallback={<h1>Loading steps...</h1>}>
         <RecipeSteps steps={recipe.recipeSteps || []} />
       </Suspense>
-      {/* <Suspense fallback={<h1>Loading reviews...</h1>}>
-        <Reviews reviews={recipe.reviews || []} />
-      </Suspense> */}
+      <Suspense fallback={<h1>Loading tags...</h1>}>
+        {recipe.tags.map((tag, index) => (
+          <Tag key={index} name={tag.name} />
+        ))}
+      </Suspense>
     </div>
   );
 }

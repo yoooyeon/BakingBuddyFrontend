@@ -41,7 +41,6 @@ const Header = () => {
             </>
           ) : (
             <>
-
               <Link href="/login" className="hover:text-primary" prefetch={false}>
                 로그인
               </Link>
