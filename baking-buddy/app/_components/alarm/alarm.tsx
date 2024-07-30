@@ -6,11 +6,11 @@ interface Alarm {
     readYn: string;
   }
   
-  interface AlarmComponentProps {
+  interface AlarmProps {
     alarms: Alarm[]; // Expect alarms to always be an array
   }
   
-  export default function AlarmComponent({ alarms }: AlarmComponentProps) {
+  export default function Alarm({ alarms }: AlarmProps) {
     // Default to an empty array if alarms is not provided
     const validAlarms = Array.isArray(alarms) ? alarms : [];
   

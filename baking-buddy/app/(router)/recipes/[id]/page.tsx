@@ -7,6 +7,7 @@ const RecipeDetails = lazy(() => import('@/app/_components/recipe/RecipeDetail')
 const IngredientsTable = lazy(() => import('@/app/_components/recipe/IngredientsTable'));
 const RecipeSteps = lazy(() => import('@/app/_components/recipe/RecipeSteps'));
 interface Recipe {
+  id: string;
   name: string;
   username: string;
   // views: number;
@@ -20,8 +21,6 @@ interface Recipe {
   ingredients: { name: string; amount: string }[];
   recipeSteps: { step: string; imageUrl: string }[];
   tags: { name: string }[];
-
-  // reviews: { username: string; avatarUrl: string; rating: number; comment: string; timeAgo: string }[];
 }
 
 export default function RecipeDetailPage() {
