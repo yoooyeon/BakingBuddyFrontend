@@ -11,16 +11,14 @@ interface Recipe {
   id: string;
   name: string;
   username: string;
-  // views: number;
   likeCount: number;
   level: string;
   userLiked: boolean;
-  // comments: number;
   time: number;
   recipeImageUrl: string;
   profileImageUrl: string;
   ingredients: { name: string; amount: string }[];
-  recipeSteps: { step: string; imageUrl: string }[];
+  recipeSteps: { stepNumber: string; stepImage: string; description: string }[];
   tags: { name: string }[];
 }
 

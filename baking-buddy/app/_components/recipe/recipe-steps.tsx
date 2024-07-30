@@ -32,7 +32,7 @@ const RecipeSteps: React.FC<RecipeStepsProps> = ({ steps }) => {
                 {/* No Image */}
               </div>
             )}
-            
+
           </div>
         ))}
       </div>

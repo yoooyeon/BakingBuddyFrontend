@@ -66,7 +66,7 @@ export default function LoginForm() {
         Login
       </button>
       <div className={styles.linkContainer}>
-        <a href="/signup" className={styles.link}>Don't have an account? Sign up</a>
+        <a href="/signup" className={styles.link}>Don&apos;t have an account? Sign up</a>
       </div>
     </form>
   );

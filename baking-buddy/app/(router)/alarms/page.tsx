@@ -1,4 +1,5 @@
 // app/alarms/AlarmPage.tsx
+import Alarm from '@/app/_components/alarm/alarm';
 import AlarmComponent from '@/app/_components/alarm/alarm';
 import { API_URL } from '@/app/constants';
 
@@ -36,7 +37,7 @@ export default async function AlarmPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <AlarmComponent alarms={alarms} />
+      <Alarm alarms={alarms} />
     </div>
   );
 }

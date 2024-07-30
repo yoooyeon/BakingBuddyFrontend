@@ -7,7 +7,7 @@ interface AlarmType {
 
 interface AlarmProps {
   alarms: AlarmType[];
-  setAlarmOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setAlarmOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function Alarm({ alarms, setAlarmOpen }: AlarmProps) {
