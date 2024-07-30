@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from "next/navigation";
-import Directory from '../recipe/Directory';
+import Directory from '../recipe/directory';
+import { API_URL } from '@/app/constants';
 // import directory from '../recipe/directory';
 
 interface RecipeResponseDto {
@@ -31,7 +32,7 @@ const UserRecipes = () => {
     if (userId) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://localhost:8080/api/users/recipes`, {
+          const response = await fetch(`${API_URL}/api/users/recipes`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -43,7 +44,6 @@ const UserRecipes = () => {
           }
           const json = await response.json();
           const data = json.data;
-          console.log("Fetched data:", data); // Log the fetched data to check its structure
           // Ensure the data is an array
           if (Array.isArray(data)) {
             setDirectories(data);

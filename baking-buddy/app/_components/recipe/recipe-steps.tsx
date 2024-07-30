@@ -2,8 +2,9 @@
 import React from 'react';
 
 interface RecipeStep {
-  step: string;
-  imageUrl: string;
+  stepNumber: string;
+  stepImage?: string; // Make this optional
+  description: string;
 }
 
 interface RecipeStepsProps {
@@ -16,15 +17,22 @@ const RecipeSteps: React.FC<RecipeStepsProps> = ({ steps }) => {
       <h3 className="text-xl font-semibold border-b pb-2 mb-4">조리순서</h3>
       <div className="space-y-6">
         {steps.map((step, index) => (
-          <div key={index} className="flex items-start space-x-4">
-            <img
-              src={step.imageUrl}
-              alt={`조리 이미지 ${index + 1}`}
-              className="w-32 h-32 object-cover rounded-lg shadow-sm"
-            />
+          <div key={index} className="items-start space-x-4">
             <div className="flex-1">
-              <p className="text-lg font-medium mb-1">{index + 1}. {step.step}</p>
+              <p className="text-lg font-medium mb-1">{step.stepNumber}. {step.description}</p>
             </div>
+            {step.stepImage ? (
+              <img
+                src={step.stepImage}
+                alt={`조리 이미지 ${index + 1}`}
+                className="w-32 h-32 object-cover rounded-lg shadow-sm"
+              />
+            ) : (
+              <div >
+                {/* No Image */}
+              </div>
+            )}
+            
           </div>
         ))}
       </div>

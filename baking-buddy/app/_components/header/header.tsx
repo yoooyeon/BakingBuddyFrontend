@@ -1,45 +1,103 @@
 "use client";
+import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { MagnifyingGlassIcon, BellIcon, UserIcon } from '@heroicons/react/24/outline';
+import Search from '../search/search';
+import { useRouter } from 'next/navigation';
+import { API_URL } from '@/app/constants';
+import Alarm from '../alarm/alarm';
 
-import { useState, useEffect } from "react";
-import { parseCookies } from 'nookies';
-import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Search from "../search/search";
-
-type SearchIconProps = React.SVGProps<SVGSVGElement>;
+interface AlarmType {
+  id: number;
+  msg: string;
+  type: string;
+  readYn: string;
+}
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [searchOpen, setSearchOpen] = useState<boolean>(false);
+  const [alarmOpen, setAlarmOpen] = useState<boolean>(false);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const [alarms, setAlarms] = useState<AlarmType[]>([]);
+
+  const alarmRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    // 페이지가 렌더링될 때 쿠키를 읽어옵니다.
-    const cookies = parseCookies();
-    console.log("All cookies:", cookies); // 디버깅을 위해 콘솔에 쿠키를 출력합니다.
-    const token = cookies.accessToken;
-    console.log("token", token);
-    setIsLoggedIn(!!token); // token이 존재하면 true, 그렇지 않으면 false로 설정합니다.
+    const checkAuthStatus = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/auth/status`, {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          const data = result.data;
+          const status = data.isAuthenticated;
+          setIsLoggedIn(status);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (error) {
+        console.error('Error checking authentication status:', error);
+        setIsLoggedIn(false);
+      }
+    };
+
+    checkAuthStatus();
+  }, [router]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      const fetchAlarms = async () => {
+        try {
+          const response = await fetch(`${API_URL}/api/alarms`, {
+            method: 'GET',
+            credentials: 'include',
+          });
+          if (response.ok) {
+            const result = await response.json();
+            setAlarms(result.data);
+          } else {
+            console.error('Error fetching alarms:', response.statusText);
+          }
+        } catch (error) {
+          console.error('Error fetching alarms:', error);
+        }
+      };
+      fetchAlarms();
+    }
+  }, [isLoggedIn]);
+
+  // Close alarm and menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        alarmRef.current && !alarmRef.current.contains(event.target as Node) &&
+        menuRef.current && !menuRef.current.contains(event.target as Node)
+      ) {
+        setAlarmOpen(false);
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   return (
     <header className="sticky top-0 z-10 bg-background shadow">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         <Link href="/" className="text-2xl font-bold" prefetch={false}>
-          BakingBuddy
+          Recipe Diary
         </Link>
-        <nav className="hidden space-x-4 md:flex">
-          {isLoggedIn ? (
-            <>
-              <Link href="/recipes/register" className="hover:text-primary" prefetch={false}>
-                레시피 등록하기
-              </Link>
-              <Link href="/recipes/users" className="hover:text-primary" prefetch={true}>
-                내 레시피
-              </Link>
-              <Link href="/logout" className="hover:text-primary" prefetch={true}>
-                로그아웃
-              </Link>
-            </>
-          ) : (
+        <nav className="flex items-center space-x-4">
+          {!isLoggedIn && (
             <>
               <Link href="/login" className="hover:text-primary" prefetch={false}>
                 로그인
@@ -49,47 +107,51 @@ const Header = () => {
               </Link>
             </>
           )}
-          <Link href="/search" className="hover:text-primary" prefetch={false}>
-            <Search />
-          </Link>
+          <button onClick={() => setSearchOpen(!searchOpen)} className="hover:text-primary">
+            <MagnifyingGlassIcon className="h-6 w-6" />
+            <span className="sr-only">Search</span>
+          </button>
+          {isLoggedIn && (
+            <div className="relative flex items-center space-x-4">
+              <button onClick={() => setAlarmOpen(!alarmOpen)} className="hover:text-primary relative">
+                <BellIcon className="h-6 w-6" />
+                <span className="sr-only">Notifications</span>
+                {alarmOpen && (
+                  <div ref={alarmRef} className="absolute right-0 top-8 w-72 bg-white border border-gray-200 rounded shadow-lg z-20">
+                    <Alarm alarms={alarms} setAlarmOpen={setAlarmOpen} />
+                  </div>
+                )}
+              </button>
+              <div className="relative" ref={menuRef}>
+                <button
+                  onClick={() => setMenuOpen(!menuOpen)}
+                  className="hover:text-primary"
+                >
+                  <UserIcon className="h-8 w-8" />
+                </button>
+                {menuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg z-20">
+                    <Link href="/mypage" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                      프로필 수정
+                    </Link>
+                    <Link href="/recipes/users" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                      내 레시피
+                    </Link>
+                    <Link href="/recipes/register" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                      레시피 등록하기
+                    </Link>
+                    <Link href="/logout" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                      로그아웃
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </nav>
-        {isLoggedIn && (
-          <div className="flex items-center space-x-4">
-            <Link href="/alarms" className="hover:text-primary" prefetch={false}>
-              <Avatar className="h-8 w-8 border">
-                <AvatarImage src="/alarm.png" />
-              </Avatar>
-            </Link>
-            <Link href="/mypage" className="hover:text-primary" prefetch={false}>
-              <Avatar className="h-8 w-8 border">
-                <AvatarImage src="/placeholder-user.jpg" />
-                <AvatarFallback>AB</AvatarFallback>
-              </Avatar>
-            </Link>
-          </div>
-        )}
       </div>
+      {searchOpen && <Search setSearchOpen={setSearchOpen} />}
     </header>
-  );
-};
-
-const SearchIcon: React.FC<SearchIconProps> = (props) => {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
-    </svg>
   );
 };
 

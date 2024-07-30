@@ -11,7 +11,6 @@ const Logout = () => {
   useEffect(() => {
     const logout = async () => {
       try {
-        console.log("logout api")
         // 서버 로그아웃 API 호출
         const response = await fetch(`${API_URL}/logout`, {
           method: 'POST',
@@ -19,16 +18,10 @@ const Logout = () => {
         });
 
         if (response.ok) {
-          // nookies로 쿠키 삭제
-          destroyCookie(null, 'accessToken', { path: '/' });
-          destroyCookie(null, 'refreshToken', { path: '/' });
-
-          // document.cookie로 쿠키 삭제 (대안)
-          document.cookie = 'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-          document.cookie = 'refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-
           // 로그인 페이지로 리다이렉트
           router.push('/login');
+          router.refresh();
+
         } else {
           console.error('Failed to log out');
         }

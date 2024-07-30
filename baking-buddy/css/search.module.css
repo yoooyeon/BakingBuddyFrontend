@@ -1,0 +1,105 @@
+/* css/search.module.css */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.searchContainer {
+    position: relative;
+    width: 80%;
+    max-width: 600px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    top: 10%;
+    align-items: flex-start;
+}
+
+.searchInput {
+    height: 40px;
+    width: 90%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.resultsContainer {
+    margin-top: 12px;
+}
+
+.resultsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.resultItem {
+    padding: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.resultItem:hover {
+    background-color: #f0f0f0;
+}
+
+.sectionTitle {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.button{
+    width: 10%;
+    height: 40px;
+
+    padding: 2px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.2s ease-in-out;
+}
+
+
+.resultsGrid {
+    display: flex;
+    justify-content: space-between; /* Adjust spacing between columns */
+}
+
+.resultsContainer {
+    width: 48%; /* Adjust width as needed */
+}
+
+.sectionTitle {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.resultsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.resultItem {
+    padding: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.resultItem:hover {
+    background-color: #f0f0f0;
+}

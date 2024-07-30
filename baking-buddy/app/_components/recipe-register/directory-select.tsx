@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import styles from '../../../css/form.module.css';
+import { API_URL } from '@/app/constants';
 
 interface Directory {
     id: number;
@@ -17,20 +18,18 @@ const DirectorySelect: React.FC<{ setDirId: React.Dispatch<React.SetStateAction<
     useEffect(() => {
         async function fetchDirectories() {
             try {
-                const userId = 1; // Replace with the actual userId
-                const response = await fetch(`http://localhost:8080/api/directories/users/${userId}`, {
+                const response = await fetch(`${API_URL}/api/directories/users`, {
                     method: 'GET',
                     headers: {
                       'Content-Type': 'application/json',
                     },
-                    credentials: 'include', // 쿠키를 요청에 포함시키기 위한 설정
-                  });
+                    credentials: 'include', // Include cookies in the request
+                });
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const json = await response.json();
                 const data = json.data;
-                console.log(data);
                 setDirectories(Array.isArray(data) ? data : []);
                 setLoading(false);
             } catch (error) {
@@ -45,21 +44,29 @@ const DirectorySelect: React.FC<{ setDirId: React.Dispatch<React.SetStateAction<
         fetchDirectories();
     }, []);
 
+    useEffect(() => {
+        if (directories.length > 0) {
+            setDirId(directories[0].id.toString());
+        }else{
+            setDirId('')
+        }
+    }, [directories, setDirId]);
+
     const handleAddDirectory = async () => {
         try {
-            const userId = 1; // Replace with the actual userId
-            const response = await fetch('http://localhost:8080/api/directories', {
+            const response = await fetch(`${API_URL}/api/directories/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                credentials:'include',
-                body: JSON.stringify({ userId, name: newDirName }),
+                credentials: 'include',
+                body: JSON.stringify({ name: newDirName }),
             });
             if (!response.ok) {
                 throw new Error('Failed to add directory');
             }
-            const newDirectory = await response.json();
+            const json = await response.json();
+            const newDirectory = json.data;
             setDirectories((prevDirectories) => [...prevDirectories, newDirectory]);
             setNewDirName("");
             setShowModal(false);

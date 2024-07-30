@@ -1,6 +1,7 @@
+import { API_URL } from "@/app/constants";
 
 export const fetchRecipes = async (page: number, size: number) => {
-  const response = await fetch(`http://localhost:8080/api/recipes?page=${page}&size=${size}`, {
+  const response = await fetch(`${API_URL}/api/recipes?page=${page}&size=${size}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

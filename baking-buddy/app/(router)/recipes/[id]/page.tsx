@@ -2,6 +2,7 @@
 import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { useParams } from 'next/navigation';
 import Tag from '@/app/_components/recipe/tag';
+import { API_URL } from '@/app/constants';
 
 const RecipeDetails = lazy(() => import('@/app/_components/recipe/recipe-detail'));
 const IngredientsTable = lazy(() => import('@/app/_components/recipe/ingredients-table'));
@@ -36,7 +37,7 @@ export default function RecipeDetailPage() {
 
     async function fetchRecipe() {
       try {
-        const response = await fetch(`http://localhost:8080/api/recipes/${recipeId}`, {
+        const response = await fetch(`${API_URL}/api/recipes/${recipeId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -48,7 +49,6 @@ export default function RecipeDetailPage() {
         }
         const json = await response.json();
         const data = json.data;
-        console.log(data);
         setRecipe(data);
         setLoading(false);
       } catch (err) {
@@ -61,7 +61,6 @@ export default function RecipeDetailPage() {
   }, [recipeId]); // recipeId가 변경될 때만 실행
 
   useEffect(() => {
-    console.log("recipeId:", recipeId);
   }, [recipeId]); // recipeId가 제대로 설정되는지 확인
 
   if (loading) {

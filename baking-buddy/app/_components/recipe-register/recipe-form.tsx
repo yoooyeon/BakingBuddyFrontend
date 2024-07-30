@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from 'react';
 import DirectorySelect from './directory-select';
-import IngredientList from './IngredientList';
+import IngredientList from './ingredient-list';
 import RecipeStepForm from './recipe-step-form';
 import TagList from './tag-list';
 import styles from '../../../css/form.module.css';
+import { API_URL } from '@/app/constants';
 
 interface RecipeStep {
     stepNumber: number;
@@ -29,15 +30,10 @@ export default function RecipeForm() {
 
         const recipeData = {
             name,
-            dirId: dirId,
+            dirId,
             description,
             openYn,
             ingredients,
-            recipeSteps: recipeSteps.map((step) => ({
-                stepNumber: step.stepNumber,
-                description: step.description,
-                // stepImage는 제외하고 전송
-            })),
             time: Number(time),
             level,
             tags,
@@ -49,9 +45,8 @@ export default function RecipeForm() {
             formData.append('recipeImage', recipeImage, recipeImage.name);
         }
 
-
         try {
-            const response = await fetch('http://localhost:8080/api/recipes', {
+            const response = await fetch(`${API_URL}/api/recipes`, {
                 method: 'POST',
                 credentials: 'include',
                 body: formData,
@@ -62,9 +57,33 @@ export default function RecipeForm() {
             }
 
             const responseData = await response.json();
-            console.log('Recipe successfully created', responseData);
+
+            const recipeId = responseData.data.id;
+
+            // Now save the steps
+            for (const step of recipeSteps) {
+                const stepFormData = new FormData();
+                stepFormData.append('stepNumber', step.stepNumber.toString());
+                stepFormData.append('description', step.description);
+                if (step.stepImage) {
+                    stepFormData.append('stepImage', step.stepImage, step.stepImage.name);
+                }
+
+                const stepResponse = await fetch(`${API_URL}/api/recipes/${recipeId}/steps`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: stepFormData,
+                });
+
+                if (!stepResponse.ok) {
+                    throw new Error('Failed to add step');
+                }
+
+                const stepResponseData = await stepResponse.json();
+            }
+
         } catch (error) {
-            console.error('Error creating recipe:', error);
+            console.error('Error creating recipe or adding steps:', error);
         }
     };
 
@@ -78,7 +97,7 @@ export default function RecipeForm() {
             <div className={styles.inputGroup}>
                 <label htmlFor="recipeImage" className={styles.label}>레시피 이미지 업로드</label>
                 <div className={styles.imageContainer}>
-                    <input type="file" className={styles.fileInput} id="recipeImage" name="recipeImage" onChange={(e) => setRecipeImage(e.target.files ? e.target.files[0] : null)} />
+                    <input type="file" className={styles.input} id="recipeImage" name="recipeImage" onChange={(e) => setRecipeImage(e.target.files ? e.target.files[0] : null)} />
                 </div>
             </div>
             <div className={styles.inputGroup}>

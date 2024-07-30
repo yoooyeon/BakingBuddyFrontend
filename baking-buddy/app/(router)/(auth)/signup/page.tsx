@@ -3,6 +3,7 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import SignupForm from "@/app/_components/auth/signup-form";
+import { API_URL } from "@/app/constants";
 
 // Define the shape of formData
 interface FormData {
@@ -34,7 +35,7 @@ export default function SignupPage() {
     event.preventDefault();
 
     try {
-      const response = await fetch(`http://localhost:8080/signup`, { // Ensure protocol is included
+      const response = await fetch(`${API_URL}/signup`, { // Ensure protocol is included
         method: "POST",
         headers: {
           "Content-Type": "application/json"

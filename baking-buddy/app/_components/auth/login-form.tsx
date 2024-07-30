@@ -1,16 +1,13 @@
-"use client";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import styles from "../../../css/form.module.css";
-import { API_URL } from "@/app/constants";
-import { setCookie } from 'nookies';
-import { parseCookies } from 'nookies';
+"use client"
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import styles from '../../../css/form.module.css';
+import { API_URL } from '@/app/constants';
 
 export default function LoginForm() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string>(""); // To handle any errors during login
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string>('');
   const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -18,37 +15,25 @@ export default function LoginForm() {
 
     try {
       const response = await fetch(`${API_URL}/login`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json"
+          'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password }),
       });
 
       if (response.ok) {
-        const json = await response.json();
-        const data = json.data;
-        setCookie(null, 'accessToken', data.accessToken, {
-          maxAge: 30 * 24 * 60 * 60,
-          path: '/',
-          sameSite: 'None',
-        });
-
-        setCookie(null, 'refreshToken', data.refreshToken, {
-          maxAge: 30 * 24 * 60 * 60,
-          path: '/',
-          sameSite: 'None',
-        });
-        router.push("/"); // 로그인 후 메인 페이지로 이동
+        // 로그인 성공 후 쿠키가 서버에 의해 설정됩니다
+        router.push('/'); // 로그인 후 메인 페이지로 이동
         window.location.reload(); // 페이지 리로드 추가
       } else {
         const result = await response.json();
-        setError(result.message || "Invalid login credentials.");
+        setError(result.message || 'Invalid login credentials.');
       }
     } catch (error) {
-      setError("An unexpected error occurred. Please try again.");
-      console.error("Login error:", error);
+      setError('An unexpected error occurred. Please try again.');
+      console.error('Login error:', error);
     }
   };
 

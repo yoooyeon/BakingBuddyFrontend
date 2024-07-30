@@ -19,10 +19,14 @@ const RecipeStepForm: React.FC<{ setRecipeSteps: React.Dispatch<React.SetStateAc
                 description: stepDescription,
                 stepImage: stepImage,
             };
-            setSteps([...steps, newStep]);
+            // 새로운 단계 추가
+            const updatedSteps = [...steps, newStep];
+            setSteps(updatedSteps);
+            setRecipeSteps(updatedSteps);
+
+            // 상태 초기화
             setStepDescription('');
             setStepImage(null);
-            setRecipeSteps([...steps, newStep]);
         }
     };
 
@@ -32,16 +36,6 @@ const RecipeStepForm: React.FC<{ setRecipeSteps: React.Dispatch<React.SetStateAc
             <button type="button" className={styles.button} onClick={addStep}>
                 단계 추가
             </button>
-            <div id="recipeStepList" className={styles.inputGroup}>
-                {steps.map((step, index) => (
-                    <div key={index} className={styles.step}>
-                        <div>
-                            <h5>{`단계 ${index + 1}`}</h5>
-                        </div>
-                        <p>{step.description}</p>
-                    </div>
-                ))}
-            </div>
             <div className={styles.inputGroup}>
                 <input
                     type="text"
@@ -57,6 +51,23 @@ const RecipeStepForm: React.FC<{ setRecipeSteps: React.Dispatch<React.SetStateAc
                     onChange={(e) => setStepImage(e.target.files ? e.target.files[0] : null)}
                     className={styles.input}
                 />
+            </div>
+            <div id="recipeStepList" className={styles.inputGroup}>
+                {steps.map((step, index) => (
+                    <div key={index} className={styles.step}>
+                        <div>
+                            <h5 className='text-base font-medium bg-gray-100 p-2 rounded'>{`단계 ${index + 1}`}</h5>
+                        </div>
+                        <p>{step.description}</p>
+                        {step.stepImage && (
+                            <img
+                                src={URL.createObjectURL(step.stepImage)}
+                                alt={`Step ${index + 1}`}
+                                className={styles.stepImage}
+                            />
+                        )}
+                    </div>
+                ))}
             </div>
         </div>
     );

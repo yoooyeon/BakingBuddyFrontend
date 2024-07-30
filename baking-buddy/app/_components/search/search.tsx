@@ -1,117 +1,185 @@
-"use client"
 import { API_URL } from "@/app/constants";
-import { SearchIcon } from "lucide-react";
-import axios from "axios";
-import { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { useState, useEffect, useRef } from 'react';
+import styles from '../../../css/search.module.css';
 
-const Search = () => {
-    const [searchTerm, setSearchTerm] = useState("");
-    const [recentSearches, setRecentSearches] = useState<string[]>([]);
-    const [popularSearches, setPopularSearches] = useState<string[]>([]);
-    const [autocompleteResults, setAutocompleteResults] = useState<string[]>([]);
-    const [searchOpen, setSearchOpen] = useState(false);
+interface Autocomplete {
+    name: string;
+    recipeId: string;
+    imageUrl: string;
+}
 
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+interface PopularItem {
+    term: string;
+    id: string;
+}
+
+interface RecentItem {
+    search: string;
+    timestamp: string;
+}
+
+const Search = ({ setSearchOpen }: { setSearchOpen: (open: boolean) => void }) => {
+    const [searchTerm, setSearchTerm] = useState<string>("");
+    const [autocompleteResults, setAutocompleteResults] = useState<Autocomplete[]>([]);
+    const [recentSearches, setRecentSearches] = useState<RecentItem[]>([]);
+    const [popularSearches, setPopularSearches] = useState<PopularItem[]>([]);
+    const searchRef = useRef<HTMLDivElement>(null);
+    const router = useRouter();
+
+    const fetchRecentAndPopularSearches = async () => {
+        try {
+            // Fetch recent searches
+            const recentResponse = await axios.get(`${API_URL}/api/users/recent`, {
+                withCredentials: true,
+            });
+            setRecentSearches(recentResponse.data.data);
+
+            // Fetch popular searches
+            const popularResponse = await axios.get(`${API_URL}/api/search/popular`, {
+                withCredentials: true,
+            });
+            setPopularSearches(popularResponse.data.data);
+        } catch (err) {
+            console.error("Failed to fetch recent or popular searches", err);
+        }
+    };
+
+    const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
         if (e.target.value) {
-            // Cache the search term
-            axios.post(`${API_URL}/api/redis/term`, { term: e.target.value }, {
-                withCredentials: true,
-            })
-                .catch((err) => {
-                    console.error("Failed to cache search term", err);
+            try {
+                // Fetch autocomplete results
+                const response = await axios.get(`${API_URL}/api/redis/autocomplete?prefix=${e.target.value}`, {
+                    withCredentials: true,
                 });
+                setAutocompleteResults(response.data.data);
+            } catch (err) {
+                console.error("Failed to fetch autocomplete results", err);
+            }
+        } else {
+            setAutocompleteResults([]);
+            fetchRecentAndPopularSearches(); // Fetch recent and popular searches when input is empty
+        }
+    };
+
+    const handleSearchSubmit = async () => {
+        if (searchTerm) {
+            try {
+                // Optionally fetch results before navigating
+                await axios.get(`${API_URL}/api/search/recipes?term=${searchTerm}`, {
+                    withCredentials: true,
+                });
+                // Navigate to search results page
+                router.push(`/search?term=${searchTerm}`);
+                setSearchOpen(false); // Close the modal after navigating
+            } catch (err) {
+                console.error("Failed to fetch search results", err);
+            }
+        }
+    };
+
+    const handleItemClick = (recipeId: string) => {
+        router.push(`/recipes/${recipeId}`);
+        setSearchOpen(false); // Close the modal after navigating
+    };
+
+    const handleItemNameClick = (term: string) => {
+        router.push(`/search?term=${term}`);
+        setSearchOpen(false); // Close the modal after navigating
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Prevent default form submission behavior
+            handleSearchSubmit(); // Trigger search on Enter key press
         }
     };
 
     useEffect(() => {
-        if (!searchTerm) {
-            // Fetch recent and popular searches when search term is empty
-            axios.get(`${API_URL}/api/users/recent`, {
-                withCredentials: true,
-            })
-                .then((res) => {
-                    const data = Array.isArray(res.data) ? res.data : [];
-                    setRecentSearches(data);
-                })
-                .catch((err) => {
-                    console.error("Failed to fetch recent searches", err);
-                    setRecentSearches([]);
-                });
+        fetchRecentAndPopularSearches(); // Fetch data when component mounts
 
-            axios.get(`${API_URL}/api/search/popular`, {
-                withCredentials: true,})
-                .then((res) => {
-                    const data = Array.isArray(res.data) ? res.data : [];
-                    setPopularSearches(data);
-                })
-                .catch((err) => {
-                    console.error("Failed to fetch popular searches", err);
-                    setPopularSearches([]);
-                });
-        } else {
-            // Fetch autocomplete results when search term is not empty
-            axios.get(`${API_URL}/api/redis/autocomplete?term=${searchTerm}`, {
-                withCredentials: true,
-            })
-                .then((res) => {
-                    const data = Array.isArray(res.data) ? res.data : [];
-                    setAutocompleteResults(data);
-                })
-                .catch((err) => {
-                    console.error("Failed to fetch autocomplete results", err);
-                    setAutocompleteResults([]);
-                });
-        }
-    }, [searchTerm]);
+        const handleClickOutside = (event: MouseEvent) => {
+            if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+                setSearchOpen(false);
+            }
+        };
 
-    return (<div className="relative">
-        <button onClick={() => setSearchOpen(!searchOpen)} className="hover:text-primary">
-            <SearchIcon className="h-6 w-6" />
-        </button>
-        {searchOpen && (
-            <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-300 rounded shadow-lg">
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [setSearchOpen]);
+
+    return (
+        <div className={styles.overlay}>
+            <div ref={searchRef} className={styles.searchContainer}>
                 <input
                     type="text"
-                    className="w-full p-2 border-b border-gray-300"
+                    className={styles.searchInput}
                     placeholder="검색어를 입력하세요"
                     value={searchTerm}
                     onChange={handleSearchChange}
+                    onKeyDown={handleKeyDown}
                 />
-                <div className="p-2">
-                    {searchTerm ? (
-                        <ul>
-                            {autocompleteResults.map((result, index) => (
-                                <li key={index} className="p-1 hover:bg-gray-200">
-                                    {result}
+                <button onClick={handleSearchSubmit} className={styles.button}>
+                    검색
+                </button>
+                {autocompleteResults.length > 0 ? (
+                    <div className={styles.resultsContainer}>
+                        <ul className={styles.resultsList}>
+                            {autocompleteResults.map((result) => (
+                                <li
+                                    key={result.recipeId}
+                                    className={styles.resultItem}
+                                    onClick={() => handleItemClick(result.recipeId)}
+                                >
+                                    {result.imageUrl && (
+                                        <img src={result.imageUrl} alt={result.name} className="w-8 h-8 mr-2 rounded-full" />
+                                    )}
+                                    {result.name}
                                 </li>
                             ))}
                         </ul>
-                    ) : (
-                        <>
-                            <h4 className="font-bold">최근 검색어</h4>
-                            <ul>
-                                {recentSearches.map((term, index) => (
-                                    <li key={index} className="p-1 hover:bg-gray-200">
-                                        {term}
-                                    </li>
-                                ))}
-                            </ul>
-                            <h4 className="mt-2 font-bold">인기 검색어</h4>
-                            <ul>
-                                {popularSearches.map((term, index) => (
-                                    <li key={index} className="p-1 hover:bg-gray-200">
-                                        {term}
-                                    </li>
-                                ))}
-                            </ul>
-                        </>
-                    )}
-                </div>
+                    </div>
+                ) : (
+                    <div className={styles.resultsGrid}>
+                        {recentSearches.length > 0 && (
+                            <div className={styles.resultsContainer}>
+                                <div className={styles.sectionTitle}>최근 검색어</div>
+                                <ul className={styles.resultsList}>
+                                    {recentSearches.map((item) => (
+                                        <li
+                                            key={item.search}
+                                            className={styles.resultItem}
+                                            onClick={() => handleItemNameClick(item.search)}
+                                        >
+                                            {item.search}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                        {popularSearches.length > 0 && (
+                            <div className={styles.resultsContainer}>
+                                <div className={styles.sectionTitle}>인기 검색어</div>
+                                <ul className={styles.resultsList}>
+                                    {popularSearches.map((item) => (
+                                        <li
+                                            key={item.id}
+                                            className={styles.resultItem}
+                                            onClick={() => handleItemNameClick(item.term)}
+                                        >
+                                            {item.term}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
-        )}
-    </div>
-    )
-}
+        </div>
+    );
+};
 
 export default Search;

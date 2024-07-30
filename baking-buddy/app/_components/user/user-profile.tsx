@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import styles from "../../../css/form.module.css";
+import { API_URL } from "@/app/constants";
 
 interface UserProfileProps {
   username: string;
@@ -17,12 +18,13 @@ const UserProfile = () => {
 
   const [loading, setLoading] = useState(true);
   const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
   useEffect(() => {
     // Fetch user profile data from the server
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/users/mypage`, {
+        const response = await fetch(`${API_URL}/api/users/mypage`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -33,6 +35,7 @@ const UserProfile = () => {
           const json = await response.json();
           const data = json.data;
           setProfile(data);
+          setPreview(data.profileImageUrl); // Set initial preview image
         } else {
           console.error("Error fetching user profile:", response.statusText);
         }
@@ -58,6 +61,7 @@ const UserProfile = () => {
     const file = e.target.files?.[0];
     if (file) {
       setFile(file);
+      setPreview(URL.createObjectURL(file)); // Create a preview URL for the selected file
     }
   };
 
@@ -72,7 +76,7 @@ const UserProfile = () => {
         formData.append("profileImage", file);
       }
 
-      const response = await fetch(`http://localhost:8080/api/users`, {
+      const response = await fetch(`${API_URL}/api/users`, {
         method: "PUT",
         credentials: 'include',
         body: formData,
@@ -94,12 +98,12 @@ const UserProfile = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={handleSubmit}>
       <div className={styles.imageContainer}>
         <img
-          src={profile.profileImageUrl || "/placeholder-user.jpg"} // Fallback to a default image if no profile image URL
+          src={preview || profile.profileImageUrl || "/placeholder-user.jpg"} // Use preview image or fallback to profileImageUrl or placeholder
           alt="Profile"
-          className={styles.profileImage}
+          className={styles.profileImageBig}
         />
         <input
           type="file"
