@@ -11,7 +11,7 @@ interface Alarm {
 
 async function fetchAlarms(userId: string): Promise<Alarm[]> {
   try {
-    const response = await fetch(`${API_URL}/api/alarms/users/${userId}`, {
+    const response = await fetch(`${API_URL}/api/alarms/users`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'

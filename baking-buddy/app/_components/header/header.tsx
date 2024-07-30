@@ -35,7 +35,7 @@ const Header = () => {
               <Link href="/recipes/register" className="hover:text-primary" prefetch={false}>
                 레시피 등록하기
               </Link>
-              <Link href="/recipes/users/1" className="hover:text-primary" prefetch={true}>
+              <Link href="/recipes/users" className="hover:text-primary" prefetch={true}>
                 내 레시피
               </Link>
               <Link href="/logout" className="hover:text-primary" prefetch={true}>

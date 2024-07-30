@@ -22,9 +22,7 @@ const UserProfile = () => {
     // Fetch user profile data from the server
     const fetchUserProfile = async () => {
       try {
-        // Get the user ID from context or authentication state
-        const userId = "1"; // Replace this with the actual user ID retrieval logic
-        const response = await fetch(`http://localhost:8080/api/users/${userId}`, {
+        const response = await fetch(`http://localhost:8080/api/users/mypage`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -67,8 +65,6 @@ const UserProfile = () => {
     e.preventDefault();
 
     try {
-      // Get the user ID from context or authentication state
-      const userId = "1"; // Replace this with the actual user ID retrieval logic
       const formData = new FormData();
       formData.append("username", profile.username);
       formData.append("nickname", profile.nickname);
@@ -76,7 +72,7 @@ const UserProfile = () => {
         formData.append("profileImage", file);
       }
 
-      const response = await fetch(`http://localhost:8080/api/users/${userId}`, {
+      const response = await fetch(`http://localhost:8080/api/users`, {
         method: "PUT",
         credentials: 'include',
         body: formData,

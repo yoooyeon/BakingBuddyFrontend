@@ -30,7 +30,7 @@ const UserRecipes = () => {
     if (userId) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://localhost:8080/api/users/${userId}/recipes`, {
+          const response = await fetch(`http://localhost:8080/api/users/recipes`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
