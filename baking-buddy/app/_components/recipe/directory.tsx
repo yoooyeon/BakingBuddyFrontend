@@ -1,8 +1,7 @@
-"use client"
-
 import { useState } from 'react';
 import RecipeCard from './recipe-card';
 import styles from '../../../css/directory-recipe.module.css';
+import { API_URL } from '@/app/constants';
 
 interface RecipeResponseDto {
   id: number;
@@ -26,9 +25,34 @@ interface DirectoryProps {
 
 const Directory: React.FC<DirectoryProps> = ({ directory }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [recipes, setRecipes] = useState(directory.recipes);
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!window.confirm('Are you sure you want to delete this recipe?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/api/recipes/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // or 'same-origin' depending on your setup
+      });
+
+      if (response.ok) {
+        setRecipes(prevRecipes => prevRecipes.filter(recipe => recipe.id !== id));
+      } else {
+        console.error('Failed to delete recipe');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   if (!directory) {
@@ -45,11 +69,15 @@ const Directory: React.FC<DirectoryProps> = ({ directory }) => {
       </div>
       {isOpen && (
         <div className={styles.recipeList}>
-          <div className={styles.recipeGrid}>
-            {directory.recipes.map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe} />
-            ))}
-          </div>
+          {recipes.length === 0 ? (
+            <p className="text-gray-500">No recipes available.</p> // 레시피가 없을 때 메시지
+          ) : (
+            <div className={styles.recipeGrid}>
+              {recipes.map((recipe) => (
+                <RecipeCard key={recipe.id} recipe={recipe} onDelete={handleDelete} />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
