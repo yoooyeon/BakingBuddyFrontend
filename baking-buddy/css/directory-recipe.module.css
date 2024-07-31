@@ -1,0 +1,87 @@
+.container {
+  padding: 16px;
+  margin: 16px;
+}
+
+.directoryGrid {
+
+  display: grid;
+
+  grid-template-columns: repeat(1, 1fr);
+
+  gap: 16px;
+
+}
+
+@media (min-width: 768px) {
+
+  .directoryGrid {
+
+    grid-template-columns: repeat(2, 1fr);
+
+  }
+
+}
+
+
+
+@media (min-width: 1024px) {
+
+  .directoryGrid {
+
+    grid-template-columns: repeat(3, 1fr);
+
+  }
+
+}
+
+.directoryContainer {
+  margin: 16px 0;
+  display: grid;
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.directoryCard {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  will-change: transform;
+
+}
+
+.directoryCard:hover {
+  background-color: #f9f9f9;
+  transform: scale(1.02);
+}
+
+.directoryTitle {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.recipeList {
+  margin-top: 16px;
+}
+
+.recipeGrid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .recipeGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .recipeGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

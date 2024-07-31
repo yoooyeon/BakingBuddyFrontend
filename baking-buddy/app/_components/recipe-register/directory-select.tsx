@@ -80,6 +80,7 @@ const DirectorySelect: React.FC<{ setDirId: React.Dispatch<React.SetStateAction<
     };
 
     const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        // console.log(event.target.value)
         setDirId(event.target.value);
     };
 

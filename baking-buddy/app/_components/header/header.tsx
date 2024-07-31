@@ -54,7 +54,7 @@ const Header = () => {
     if (isLoggedIn) {
       const fetchAlarms = async () => {
         try {
-          const response = await fetch(`${API_URL}/api/alarms`, {
+          const response = await fetch(`${API_URL}/api/alarms/users`, {
             method: 'GET',
             credentials: 'include',
           });

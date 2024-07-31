@@ -1,4 +1,8 @@
+"use client"
+
+import { useState } from 'react';
 import RecipeCard from './recipe-card';
+import styles from '../../../css/directory-recipe.module.css';
 
 interface RecipeResponseDto {
   id: number;
@@ -8,7 +12,6 @@ interface RecipeResponseDto {
   time: number;
   level: string;
   likeCount: number;
-  // username: string;
 }
 
 interface DirectoryWithRecipesResponseDto {
@@ -17,15 +20,38 @@ interface DirectoryWithRecipesResponseDto {
   recipes: RecipeResponseDto[];
 }
 
-const Directory = ({ directory }: { directory: DirectoryWithRecipesResponseDto }) => {
+interface DirectoryProps {
+  directory: DirectoryWithRecipesResponseDto;
+}
+
+const Directory: React.FC<DirectoryProps> = ({ directory }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleOpen = () => {
+    setIsOpen(!isOpen);
+  };
+
+  if (!directory) {
+    return null; // directory가 없으면 아무 것도 렌더링하지 않음
+  }
+
   return (
-    <div className="mb-8">
-      <h2 className="text-xl font-semibold mb-2">{directory.dirName}</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {directory.recipes.map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} />
-        ))}
+    <div className={styles.directoryContainer}>
+      <div 
+        className={`${styles.directoryCard} ${isOpen ? styles.open : ''}`} 
+        onClick={toggleOpen}
+      >
+        <h2 className={styles.directoryTitle}>{directory.dirName}</h2>
       </div>
+      {isOpen && (
+        <div className={styles.recipeList}>
+          <div className={styles.recipeGrid}>
+            {directory.recipes.map((recipe) => (
+              <RecipeCard key={recipe.id} recipe={recipe} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

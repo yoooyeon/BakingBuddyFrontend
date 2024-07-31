@@ -1,6 +1,5 @@
 // app/alarms/AlarmPage.tsx
 import Alarm from '@/app/_components/alarm/alarm';
-import AlarmComponent from '@/app/_components/alarm/alarm';
 import { API_URL } from '@/app/constants';
 
 interface Alarm {
@@ -10,7 +9,7 @@ interface Alarm {
   readYn: string;
 }
 
-async function fetchAlarms(userId: string): Promise<Alarm[]> {
+async function fetchAlarms(): Promise<Alarm[]> {
   try {
     const response = await fetch(`${API_URL}/api/alarms/users`, {
         method: 'GET',
@@ -32,8 +31,7 @@ async function fetchAlarms(userId: string): Promise<Alarm[]> {
 }
 
 export default async function AlarmPage() {
-  const userId = '1'; // Replace with actual user ID
-  const alarms = await fetchAlarms(userId);
+  const alarms = await fetchAlarms();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
