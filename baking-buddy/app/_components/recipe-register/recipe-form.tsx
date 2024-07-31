@@ -13,17 +13,23 @@ interface RecipeStep {
     stepImage: File | null;
 }
 
+interface Ingredient {
+    name: string,
+    amount: number,
+    unitDisplayName: string,
+}
 export default function RecipeForm() {
     const [name, setName] = useState('');
     const [dirId, setDirId] = useState('');
     const [description, setDescription] = useState('');
     const [openYn, setOpenYn] = useState('Y'); // 기본값 설정
-    const [ingredients, setIngredients] = useState<string[]>([]);
+    const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [recipeSteps, setRecipeSteps] = useState<RecipeStep[]>([]);
     const [time, setTime] = useState('');
     const [level, setLevel] = useState('Easy'); // 기본값 설정
     const [tags, setTags] = useState<string[]>([]);
     const [recipeImage, setRecipeImage] = useState<File | null>(null);
+    const [servings, setServings] = useState('');
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -37,6 +43,8 @@ export default function RecipeForm() {
             time: Number(time),
             level,
             tags,
+            servings,
+
         };
 
         const formData = new FormData();
@@ -104,6 +112,10 @@ export default function RecipeForm() {
                 <label htmlFor="description" className={styles.label}>요리 설명</label>
                 <textarea className={styles.input} id="description" name="description" rows={4} value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
                 <div id="charCount" className={styles.charCount}>{description.length} 글자</div>
+            </div>
+            <div>
+                <label> 기준 인분</label>
+                <input type="number" className={styles.input}  id="servings" name="servings" value={servings} onChange={(e) => setServings(e.target.value)} ></input>
             </div>
             <IngredientList ingredients={ingredients} setIngredients={setIngredients} />
             <RecipeStepForm setRecipeSteps={setRecipeSteps} />

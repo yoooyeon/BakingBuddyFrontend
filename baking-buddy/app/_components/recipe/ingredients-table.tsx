@@ -5,6 +5,7 @@ import { Table, TableBody, TableRow, TableCell } from "@/components/ui/table";
 interface Ingredient {
   name: string;
   amount: string;
+  unitDisplayName: string;
 }
 
 interface IngredientsTableProps {
@@ -20,7 +21,7 @@ const IngredientsTable: React.FC<IngredientsTableProps> = ({ ingredients }) => {
           {ingredients.map((ingredient, index) => (
             <TableRow key={index} className="border-b last:border-b-0">
               <TableCell className="py-2 px-4 text-sm text-gray-700">{ingredient.name}</TableCell>
-              <TableCell className="py-2 px-4 text-sm text-gray-500 text-right">{ingredient.amount}</TableCell>
+              <TableCell className="py-2 px-4 text-sm text-gray-500 text-right">{ingredient.amount} {ingredient.unitDisplayName}</TableCell>
             </TableRow>
           ))}
         </TableBody>

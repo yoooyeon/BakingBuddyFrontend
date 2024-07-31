@@ -49,6 +49,7 @@
     padding: 8px;
     cursor: pointer;
     transition: background-color 0.2s;
+  
 }
 
 .resultItem:hover {
@@ -80,7 +81,7 @@
 }
 
 .resultsContainer {
-    width: 48%; /* Adjust width as needed */
+    width: 100%; /* Adjust width as needed */
 }
 
 .sectionTitle {

@@ -124,11 +124,12 @@ const Search = ({ setSearchOpen }: { setSearchOpen: (open: boolean) => void }) =
                 <button onClick={handleSearchSubmit} className={styles.button}>
                     검색
                 </button>
+                {/* 검색어 있을 때 */}
                 {autocompleteResults.length > 0 ? (
                     <div className={styles.resultsContainer}>
                         <ul className={styles.resultsList}>
                             {autocompleteResults.map((result) => (
-                                <li
+                                <li 
                                     key={result.recipeId}
                                     className={styles.resultItem}
                                     onClick={() => handleItemClick(result.recipeId)}
@@ -141,8 +142,8 @@ const Search = ({ setSearchOpen }: { setSearchOpen: (open: boolean) => void }) =
                             ))}
                         </ul>
                     </div>
-                ) : (
-                    <div className={styles.resultsGrid}>
+                ) : (               
+                    <div className={styles.resultsGrid}>  {/* 검색어 빈칸일 때 */} 
                         {recentSearches.length > 0 && (
                             <div className={styles.resultsContainer}>
                                 <div className={styles.sectionTitle}>최근 검색어</div>

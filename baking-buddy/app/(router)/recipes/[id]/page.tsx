@@ -17,7 +17,7 @@ interface Recipe {
   time: number;
   recipeImageUrl: string;
   profileImageUrl: string;
-  ingredients: { name: string; amount: string }[];
+  ingredients: { name: string; amount: string; unitDisplayName:string }[];
   recipeSteps: { stepNumber: string; stepImage: string; description: string }[];
   tags: { name: string }[];
 }

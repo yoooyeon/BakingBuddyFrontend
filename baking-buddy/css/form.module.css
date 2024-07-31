@@ -78,6 +78,16 @@
   box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.5);
 }
 
+.inlineInputs {
+  display: flex;
+  gap: 8px; /* 입력 필드 간의 간격 조정 */
+}
+
+.inlineInput {
+  flex: 1; /* 입력 필드가 동일한 비율로 공간을 차지하도록 설정 */
+}
+
+
 /* Buttons */
 .button,
 .submitButton {
@@ -184,4 +194,12 @@
   padding: 16px;
   margin-bottom: 16px;
   background-color: #fff;
+}
+
+.flex6 {
+  flex: 6;
+}
+
+.flex2 {
+  flex: 2;
 }
