@@ -26,7 +26,8 @@ const RecipeDetails: React.FC<RecipeDetailsProps> = ({ recipe }) => {
     time,
     level,
     profileImageUrl,
-    userLiked = false // userLiked가 없으면 기본값으로 false 사용
+    userLiked = false, // userLiked가 없으면 기본값으로 false 사용
+      servings,
   } = recipe;
 
   const [liked, setLiked] = useState(userLiked);
@@ -65,17 +66,17 @@ const RecipeDetails: React.FC<RecipeDetailsProps> = ({ recipe }) => {
           <span>작성자: {username}</span>
           <Avatar className="h-8 w-8 border">
             {profileImageUrl ? (
-              <AvatarImage src={profileImageUrl} alt="User profile" />
+                <AvatarImage src={profileImageUrl} alt="User profile"/>
             ) : (
-              <AvatarFallback>AB</AvatarFallback>
+                <AvatarFallback>AB</AvatarFallback>
             )}
           </Avatar>
           <span>·</span>
           <button onClick={handleLikeClick} className="flex items-center space-x-1">
             <img
-              src={liked ? '/image/red-heart.png' : '/image/blank-heart.png'}
-              alt="Like icon"
-              className="h-5 w-5 cursor-pointer"
+                src={liked ? '/image/red-heart.png' : '/image/blank-heart.png'}
+                alt="Like icon"
+                className="h-5 w-5 cursor-pointer"
             />
             <span>{currentLikeCount}</span> {/* 현재 좋아요 수 */}
           </button>
@@ -83,6 +84,8 @@ const RecipeDetails: React.FC<RecipeDetailsProps> = ({ recipe }) => {
           <span>소요시간: {time}분</span>
           <span>·</span>
           <span>난이도: {level}</span>
+          <span>·</span>
+
         </div>
       </div>
     </div>

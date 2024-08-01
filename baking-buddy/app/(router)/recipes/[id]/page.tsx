@@ -23,6 +23,7 @@ interface Recipe {
   ingredients: { name: string; amount: string; unitDisplayName: string }[];
   recipeSteps: { stepNumber: string; stepImage: string; description: string }[];
   tags: { name: string }[];
+  servings: number;
 }
 
 export default function RecipeDetailPage() {
@@ -80,6 +81,7 @@ export default function RecipeDetailPage() {
         }
         const json = await response.json();
         const data = json.data;
+        console.log(data)
         setRecipe(data);
         setLoading(false);
       } catch (err) {
@@ -109,7 +111,8 @@ export default function RecipeDetailPage() {
           <RecipeDetails recipe={recipe} />
         </Suspense>
         <Suspense fallback={<h1>Loading ingredients...</h1>}>
-          <IngredientsTable ingredients={recipe.ingredients || []} />
+          <IngredientsTable ingredients={recipe.ingredients || []} servings={recipe.servings} />
+
         </Suspense>
         <Suspense fallback={<h1>Loading steps...</h1>}>
           <RecipeSteps steps={recipe.recipeSteps || []} />

@@ -116,7 +116,7 @@ const Search = ({ setSearchOpen }: { setSearchOpen: (open: boolean) => void }) =
                 <input
                     type="text"
                     className={styles.searchInput}
-                    placeholder="검색어를 입력하세요"
+                    placeholder="요리 이름, 재료, 태그로 검색해보세요"
                     value={searchTerm}
                     onChange={handleSearchChange}
                     onKeyDown={handleKeyDown}
