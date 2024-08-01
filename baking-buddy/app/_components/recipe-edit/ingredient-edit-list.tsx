@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../../../css/form.module.css';
 import { API_URL } from '@/app/constants';
 
@@ -8,7 +8,7 @@ interface Ingredient {
     unitDisplayName: string;
 }
 
-const IngredientList: React.FC<{
+const IngredientEditList: React.FC<{
     ingredients: Ingredient[];
     setIngredients: React.Dispatch<React.SetStateAction<Ingredient[]>>;
 }> = ({ ingredients, setIngredients }) => {
@@ -17,7 +17,7 @@ const IngredientList: React.FC<{
     const [ingredientInput, setIngredientInput] = useState({
         name: '',
         amount: 0,
-        unitDisplayName: '',  // 이 필드가 유닛을 위한 것입니다.
+        unitDisplayName: '',
     });
     const [units, setUnits] = useState<string[]>([]);
 
@@ -36,7 +36,6 @@ const IngredientList: React.FC<{
                 }
                 const json = await response.json();
                 const data = json.data;
-                console.log(data)
                 setUnits(Array.isArray(data) ? data : []);
                 setLoading(false);
             } catch (error) {
@@ -59,7 +58,16 @@ const IngredientList: React.FC<{
         }));
     };
 
-    const addIngredient = useCallback(() => {
+    const handleEditChange = (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setIngredients(prevIngredients =>
+            prevIngredients.map((ingredient, i) =>
+                i === index ? { ...ingredient, [name]: name === 'amount' ? Number(value) : value } : ingredient
+            )
+        );
+    };
+
+    const addIngredient = () => {
         if (ingredientInput.name.trim() !== '' && ingredientInput.unitDisplayName.trim() !== '') {
             setIngredients(prevIngredients => [
                 ...prevIngredients,
@@ -67,10 +75,12 @@ const IngredientList: React.FC<{
             ]);
             setIngredientInput({ name: '', amount: 0, unitDisplayName: '' });
         }
-    }, [ingredientInput, setIngredients]);
+    };
+
     const removeIngredient = (index: number) => {
         setIngredients(prev => prev.filter((_, i) => i !== index));
     };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
@@ -99,7 +109,7 @@ const IngredientList: React.FC<{
                         className={`${styles.input} ${styles.inlineInput} ${styles.flex2}`}
                     />
                     <select
-                        name="unitDisplayName"  // name을 unitDisplayName으로 변경
+                        name="unitDisplayName"
                         value={ingredientInput.unitDisplayName}
                         onChange={handleChange}
                         className={`${styles.input} ${styles.inlineInput} ${styles.flex2}`}
@@ -115,15 +125,40 @@ const IngredientList: React.FC<{
             </div>
             <div id="ingredientList" className="mt-2">
                 {ingredients.map((ingredient, index) => (
-                    <span key={index}
-                          className="inline-flex items-center px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full mr-2">
-                        {ingredient.name} - {ingredient.amount} {ingredient.unitDisplayName}
+                    <div key={index} className={styles.inlineInputs}>
+                        <input
+                            type="text"
+                            name="name"
+                            value={ingredient.name}
+                            onChange={(e) => handleEditChange(index, e)}
+                            className={`${styles.input} ${styles.inlineInput} ${styles.flex6}`}
+                        />
+                        <input
+                            type="number"
+                            name="amount"
+                            value={ingredient.amount}
+                            onChange={(e) => handleEditChange(index, e)}
+                            className={`${styles.input} ${styles.inlineInput} ${styles.flex2}`}
+                        />
+                        <select
+                            name="unitDisplayName"
+                            value={ingredient.unitDisplayName}
+                            onChange={(e) => handleEditChange(index, e)}
+                            className={`${styles.input} ${styles.inlineInput} ${styles.flex2}`}
+                        >
+                            <option value="">단위 선택</option>
+                            {units.map((unit, i) => (
+                                <option key={i} value={unit}>
+                                    {unit}
+                                </option>
+                            ))}
+                        </select>
                         <button className={styles.deleteButton} onClick={() => removeIngredient(index)}>×</button>
-                    </span>
+                    </div>
                 ))}
             </div>
         </div>
     );
 };
 
-export default IngredientList;
+export default IngredientEditList;

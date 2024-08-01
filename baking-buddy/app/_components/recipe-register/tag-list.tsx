@@ -1,7 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, {useState, useCallback} from 'react';
 import styles from '../../../css/form.module.css';
 
-const TagList: React.FC<{ tags: string[], setTags: React.Dispatch<React.SetStateAction<string[]>> }> = ({ tags, setTags }) => {
+const TagList: React.FC<{ tags: string[], setTags: React.Dispatch<React.SetStateAction<string[]>> }> = ({
+                                                                                                            tags,
+                                                                                                            setTags
+                                                                                                        }) => {
     const [tagInput, setTagInput] = useState<string>('');
 
     // 중복 호출 방지
@@ -23,7 +26,9 @@ const TagList: React.FC<{ tags: string[], setTags: React.Dispatch<React.SetState
             addTag();
         }
     };
-
+    const removeTag = (index: number) => {
+        setTags(prev => prev.filter((_, i) => i !== index));
+    };
     return (
         <div className={styles.inputGroup}>
             <label htmlFor="tagList" className={styles.label}>태그</label>
@@ -43,9 +48,13 @@ const TagList: React.FC<{ tags: string[], setTags: React.Dispatch<React.SetState
             </div>
             <div id="tagList" className="mt-2">
                 {tags.map((tag, index) => (
-                    <span key={index} className="inline-flex items-center px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full mr-2">
+                    <span key={index}
+                          className="inline-flex items-center px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full mr-2">
                         #{tag}
+                        <button className={styles.deleteButton} onClick={() => removeTag(index)}>×            </button>
                     </span>
+
+
                 ))}
             </div>
         </div>

@@ -74,7 +74,7 @@ const Directory: React.FC<DirectoryProps> = ({ directory }) => {
           ) : (
             <div className={styles.recipeGrid}>
               {recipes.map((recipe) => (
-                <RecipeCard key={recipe.id} recipe={recipe} onDelete={handleDelete} />
+                <RecipeCard key={recipe.id} recipe={recipe}  />
               ))}
             </div>
           )}
