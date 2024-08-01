@@ -13,6 +13,7 @@ interface RecipeDetailsProps {
     level: string;
     profileImageUrl?: string; // profileImageUrl을 선택적으로 설정
     userLiked?: boolean; // userLiked를 선택적으로 설정
+    servings: number;
   };
 }
 
