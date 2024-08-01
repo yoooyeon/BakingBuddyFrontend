@@ -97,7 +97,7 @@ export default function RecipeForm() {
 
     return (
         <form id="recipeForm" className={styles.form} onSubmit={handleSubmit}>
-            <DirectorySelect setDirId={setDirId} />
+            <DirectorySelect setDirId={setDirId} selectedDirId={dirId}/>
             <div className={styles.inputGroup}>
                 <label htmlFor="name" className={styles.label}>레시피 이름</label>
                 <input type="text" className={styles.input} id="name" name="name" value={name} onChange={(e) => setName(e.target.value)} />

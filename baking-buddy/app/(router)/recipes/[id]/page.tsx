@@ -20,7 +20,7 @@ interface Recipe {
   time: number;
   recipeImageUrl: string;
   profileImageUrl: string;
-  ingredients: { name: string; amount: string; unitDisplayName:string }[];
+  ingredients: { name: string; amount: string; unitDisplayName: string }[];
   recipeSteps: { stepNumber: string; stepImage: string; description: string }[];
   tags: { name: string }[];
 }
@@ -35,6 +35,11 @@ export default function RecipeDetailPage() {
   const [error, setError] = useState<string | null>(null);
 
   const handleDelete = async () => {
+    if (!recipe) {
+      console.error('No recipe data available for deletion');
+      return;
+    }
+
     if (window.confirm('Are you sure you want to delete this recipe?')) {
       setIsDeleting(true);
       try {

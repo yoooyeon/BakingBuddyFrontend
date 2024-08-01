@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../../../css/form.module.css';
 
 interface RecipeStep {
@@ -8,14 +8,24 @@ interface RecipeStep {
 }
 
 interface RecipeStepEditProps {
-    steps: RecipeStep[];
+    recipeSteps: RecipeStep[];
     setRecipeSteps: React.Dispatch<React.SetStateAction<RecipeStep[]>>;
 }
 
 const RecipeStepEdit: React.FC<RecipeStepEditProps> = ({ recipeSteps = [], setRecipeSteps }) => {
     const [stepDescription, setStepDescription] = useState<string>('');
     const [stepImage, setStepImage] = useState<File | null>(null);
-    console.log(recipeSteps)
+    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (stepImage) {
+            const objectUrl = URL.createObjectURL(stepImage);
+            setImagePreviewUrl(objectUrl);
+            return () => URL.revokeObjectURL(objectUrl); // Clean up URL object
+        }
+        setImagePreviewUrl(null); // Reset when no image
+    }, [stepImage]);
+
     const addStep = () => {
         if (stepDescription.trim() !== '') {
             const newStep = {
@@ -23,10 +33,9 @@ const RecipeStepEdit: React.FC<RecipeStepEditProps> = ({ recipeSteps = [], setRe
                 description: stepDescription,
                 stepImage: stepImage,
             };
-            const updatedSteps = [...recipeSteps, newStep];
-            setRecipeSteps(updatedSteps);
+            setRecipeSteps((prevSteps) => [...prevSteps, newStep]);
 
-            // 상태 초기화
+            // Reset form
             setStepDescription('');
             setStepImage(null);
         }
@@ -34,7 +43,6 @@ const RecipeStepEdit: React.FC<RecipeStepEditProps> = ({ recipeSteps = [], setRe
 
     const removeStep = (stepNumber: number) => {
         const updatedSteps = recipeSteps.filter(step => step.stepNumber !== stepNumber);
-        // Reassign stepNumber to maintain sequence
         const reIndexedSteps = updatedSteps.map((step, index) => ({
             ...step,
             stepNumber: index + 1,
@@ -65,10 +73,9 @@ const RecipeStepEdit: React.FC<RecipeStepEditProps> = ({ recipeSteps = [], setRe
                 />
             </div>
             <div id="recipeStepList" className={styles.inputGroup}>
-                {recipeSteps && recipeSteps.length > 0 ? (
+                {recipeSteps.length > 0 ? (
                     recipeSteps.map((step) => (
                         <div key={step.stepNumber} className={styles.step}>
-
                             <div className={`${styles.stepHeader} ${styles.flexInline}`}>
                                 <h5>{`단계 ${step.stepNumber}`}</h5>
                                 <button
@@ -80,14 +87,14 @@ const RecipeStepEdit: React.FC<RecipeStepEditProps> = ({ recipeSteps = [], setRe
                                 </button>
                             </div>
                             <p>{step.description}</p>
-                            {step.stepImage ? (
+                            {step.stepImage && (
                                 <img
-                                    src={step.stepImage}
+                                    src={URL.createObjectURL(step.stepImage)}
                                     alt={`Step ${step.stepNumber}`}
                                     className={styles.stepImage}
+                                    onLoad={() => URL.revokeObjectURL(step.stepImage ? URL.createObjectURL(step.stepImage) : '')} // Clean up after loading
                                 />
-                            ) : null}
-
+                            )}
                         </div>
                     ))
                 ) : (

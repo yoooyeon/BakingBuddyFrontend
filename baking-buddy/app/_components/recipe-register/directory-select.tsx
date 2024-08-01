@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useEffect } from 'react';
 import styles from '../../../css/form.module.css';
 import { API_URL } from '@/app/constants';
@@ -8,7 +7,7 @@ interface Directory {
     name: string;
 }
 
-const DirectorySelect: React.FC<{ setDirId: React.Dispatch<React.SetStateAction<string>> }> = ({ setDirId }) => {
+const DirectorySelect: React.FC<{ setDirId: React.Dispatch<React.SetStateAction<string>>, selectedDirId: string }> = ({ setDirId, selectedDirId }) => {
     const [directories, setDirectories] = useState<Directory[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -21,23 +20,18 @@ const DirectorySelect: React.FC<{ setDirId: React.Dispatch<React.SetStateAction<
                 const response = await fetch(`${API_URL}/api/directories/users`, {
                     method: 'GET',
                     headers: {
-                      'Content-Type': 'application/json',
+                        'Content-Type': 'application/json',
                     },
-                    credentials: 'include', // Include cookies in the request
+                    credentials: 'include',
                 });
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const json = await response.json();
-                const data = json.data;
-                setDirectories(Array.isArray(data) ? data : []);
+                setDirectories(Array.isArray(json.data) ? json.data : []);
                 setLoading(false);
             } catch (error) {
-                if (error instanceof Error) {
-                    setError(error.message);
-                } else {
-                    setError('An unknown error occurred');
-                }
+                setError(error instanceof Error ? error.message : 'An unknown error occurred');
             }
         }
 
@@ -45,12 +39,10 @@ const DirectorySelect: React.FC<{ setDirId: React.Dispatch<React.SetStateAction<
     }, []);
 
     useEffect(() => {
-        if (directories.length > 0) {
+        if (directories.length > 0 && !selectedDirId) {
             setDirId(directories[0].id.toString());
-        }else{
-            setDirId('')
         }
-    }, [directories, setDirId]);
+    }, [directories, selectedDirId, setDirId]);
 
     const handleAddDirectory = async () => {
         try {
@@ -66,21 +58,15 @@ const DirectorySelect: React.FC<{ setDirId: React.Dispatch<React.SetStateAction<
                 throw new Error('Failed to add directory');
             }
             const json = await response.json();
-            const newDirectory = json.data;
-            setDirectories((prevDirectories) => [...prevDirectories, newDirectory]);
+            setDirectories((prevDirectories) => [...prevDirectories, json.data]);
             setNewDirName("");
             setShowModal(false);
         } catch (error) {
-            if (error instanceof Error) {
-                setError(error.message);
-            } else {
-                setError('An unknown error occurred');
-            }
+            setError(error instanceof Error ? error.message : 'An unknown error occurred');
         }
     };
 
     const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        // console.log(event.target.value)
         setDirId(event.target.value);
     };
 
@@ -103,7 +89,7 @@ const DirectorySelect: React.FC<{ setDirId: React.Dispatch<React.SetStateAction<
             >
                 디렉토리 추가
             </button>
-            <select id="directory" name="directory" className={styles.input} onChange={handleSelectChange}>
+            <select id="directory" name="directory" className={styles.input} onChange={handleSelectChange} value={selectedDirId}>
                 {directories.map((directory) => (
                     <option key={directory.id} value={directory.id}>
                         {directory.name}
