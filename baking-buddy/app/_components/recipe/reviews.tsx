@@ -1,4 +1,5 @@
-// components/Reviews.tsx
+
+// components/reviews.tsx
 import React from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
