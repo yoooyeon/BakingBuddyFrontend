@@ -89,10 +89,9 @@ const RecipeStepEdit: React.FC<RecipeStepEditProps> = ({ recipeSteps = [], setRe
                             <p>{step.description}</p>
                             {step.stepImage && (
                                 <img
-                                    src={URL.createObjectURL(step.stepImage)}
+                                    src={step.stepImage ? step.stepImage : ''}
                                     alt={`Step ${step.stepNumber}`}
                                     className={styles.stepImage}
-                                    onLoad={() => URL.revokeObjectURL(step.stepImage ? URL.createObjectURL(step.stepImage) : '')} // Clean up after loading
                                 />
                             )}
                         </div>
