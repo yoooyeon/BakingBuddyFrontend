@@ -29,6 +29,7 @@ interface Recipe {
 }
 
 export default function RecipeDetailPage() {
+  const loginUsername = localStorage.getItem("username");
   const params = useParams();
   const recipeId = params.id as string;
   const [isDeleting, setIsDeleting] = useState(false);
@@ -41,7 +42,7 @@ export default function RecipeDetailPage() {
   const [showPopup, setShowPopup] = useState(false); // 팝업 표시 여부
 
   const socketUrl = `${API_URL}/ws`; // Spring Boot WebSocket endpoint
-
+console.log("loginUsername=",loginUsername)
   const getToken = () => {
     return localStorage.getItem("accessToken");
   };
@@ -169,18 +170,20 @@ export default function RecipeDetailPage() {
               <Tag key={index} name={tag.name}/>
           ))}
         </Suspense>
+        {loginUsername === recipe.username && (
         <div className={styles.buttonContainer}>
           <Link href={`/recipes/${recipeId}/edit`}>
-            <button className={styles.button}>Edit Recipe</button>
+            <button className={styles.button}>레시피 수정하기</button>
           </Link>
           <button
               onClick={handleDelete}
               disabled={isDeleting}
               className={styles.button}
           >
-            {isDeleting ? 'Deleting...' : 'Delete'}
+            {isDeleting ? '삭제중...' : '삭제하기'}
           </button>
         </div>
+            )}
       </div>
   );
 }

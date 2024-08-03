@@ -34,6 +34,8 @@ export default function LoginForm() {
         localStorage.setItem("refreshToken",refreshToken)
         // alert(result.data)
         const token = localStorage.getItem("accessToken");
+        localStorage.setItem("username",username)
+       // alert(username+" 환영합니다")
 
         // 로그인 성공 후 쿠키가 서버에 의해 설정됩니다
         router.push('/'); // 로그인 후 메인 페이지로 이동
