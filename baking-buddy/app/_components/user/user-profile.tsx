@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import styles from "../../../css/form.module.css";
 import { API_URL } from "@/app/constants";
+import UesrCountPopup from "@/app/_components/popup/uesr-count-popup";
+import AlarmPopup from "@/app/_components/popup/alarm-popup";
 
 interface UserProfileProps {
   username: string;
@@ -19,6 +21,7 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [showPopup, setShowPopup] = useState(false); // 팝업 표시 여부
 
   useEffect(() => {
     // Fetch user profile data from the server
@@ -83,7 +86,8 @@ const UserProfile = () => {
       });
 
       if (response.ok) {
-        alert("Profile updated successfully");
+        <AlarmPopup msg={"프로필이 저장되었습니다."} onClose={() => setShowPopup(false)}/>
+        alert("프로필이 저장되었습니다.");
       } else {
         alert("Failed to update profile");
       }

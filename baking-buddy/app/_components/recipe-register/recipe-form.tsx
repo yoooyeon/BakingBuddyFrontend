@@ -6,6 +6,7 @@ import RecipeStepForm from './recipe-step-form';
 import TagList from './tag-list';
 import styles from '../../../css/form.module.css';
 import { API_URL } from '@/app/constants';
+import {router} from "next/client";
 
 interface RecipeStep {
     stepNumber: number;
@@ -40,7 +41,7 @@ export default function RecipeForm() {
             description,
             openYn,
             ingredients,
-            time: Number(time),
+            time,
             level,
             tags,
             servings,
@@ -87,7 +88,11 @@ export default function RecipeForm() {
                     throw new Error('Failed to add step');
                 }
 
-                const stepResponseData = await stepResponse.json();
+                const stepResponseJson = await stepResponse.json();
+                const data = stepResponseJson.data
+                console.log(data)
+                router.push(`/recipes/${data.id}`);
+
             }
 
         } catch (error) {

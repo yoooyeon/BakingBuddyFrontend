@@ -52,6 +52,11 @@
   
   .description {
     color: #4b5563; /* text-gray-600 */
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* 최대 5줄까지 표시 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .details {

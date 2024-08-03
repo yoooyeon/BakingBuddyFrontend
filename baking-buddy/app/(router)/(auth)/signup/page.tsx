@@ -10,13 +10,15 @@ interface FormData {
   username: string;
   password: string;
   nickname: string;
+  role: string;
 }
 
 export default function SignupPage() {
   const [formData, setFormData] = useState<FormData>({
     username: "",
     password: "",
-    nickname: ""
+    nickname: "",
+    role:"user",
   });
   const [error, setError] = useState<string>(""); // To handle any errors during signup
   const router = useRouter();
@@ -60,13 +62,13 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <SignupForm
-        formData={formData}
-        onChange={handleChange}
-        onSubmit={handleSubmit}
-      />
-    </div>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+        {error && <p className="text-red-500">{error}</p>}
+        <SignupForm
+            formData={formData}
+            onChange={handleChange}
+            onSubmit={handleSubmit}
+        />
+      </div>
   );
 }

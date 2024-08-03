@@ -6,6 +6,7 @@ interface FormData {
   username: string;
   password: string;
   nickname: string;
+  role: string;
 }
 
 // Define the props for SignupForm
@@ -17,47 +18,61 @@ interface SignupFormProps {
 
 const SignupForm: React.FC<SignupFormProps> = ({ formData, onChange, onSubmit }) => {
   return (
-    <form onSubmit={onSubmit} className={styles.form}>
-      <div className={styles.inputGroup}>
-        <label className={styles.label}>
-          Username:
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={onChange}
-            required
-            className={styles.input}
-          />
-        </label>
-      </div>
-      <div className={styles.inputGroup}>
-        <label className={styles.label}>
-          Password:
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={onChange}
-            required
-            className={styles.input}
-          />
-        </label>
-      </div>
-      <div className={styles.inputGroup}>
-        <label className={styles.label}>
-          Nickname:
-          <input
-            type="text"
-            name="nickname"
-            value={formData.nickname}
-            onChange={onChange}
-            className={styles.input}
-          />
-        </label>
-      </div>
-      <button type="submit" className={styles.button}>Sign Up</button>
-    </form>
+      <form onSubmit={onSubmit} className={styles.form}>
+          <div className={styles.inputGroup}>
+              <label className={styles.label}>
+                  Username:
+                  <input
+                      type="text"
+                      name="username"
+                      value={formData.username}
+                      onChange={onChange}
+                      required
+                      className={styles.input}
+                  />
+              </label>
+          </div>
+          <div className={styles.inputGroup}>
+              <label className={styles.label}>
+                  Password:
+                  <input
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={onChange}
+                      required
+                      className={styles.input}
+                  />
+              </label>
+          </div>
+          <div className={styles.inputGroup}>
+              <label className={styles.label}>
+                  Nickname:
+                  <input
+                      type="text"
+                      name="nickname"
+                      value={formData.nickname}
+                      onChange={onChange}
+                      className={styles.input}
+                  />
+              </label>
+          </div>
+          <div
+              className={`${styles.inputGroup} ${styles.hiddenInput}`}
+          >
+              <label className={styles.label}>
+                  Role:
+                  <input
+                      type="text"
+                      name="role"
+                      value={formData.role}
+                      onChange={onChange}
+                      className={styles.input}
+                  />
+              </label>
+          </div>
+          <button type="submit" className={styles.button}>Sign Up</button>
+      </form>
   );
 };
 
