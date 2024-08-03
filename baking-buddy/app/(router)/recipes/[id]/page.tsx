@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Tag from '@/app/_components/recipe/tag';
 import { API_URL } from '@/app/constants';
-import { Stomp } from '@stomp/stompjs';
+import { Stomp, IFrame } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import UserCountPopup from "@/app/_components/popup/uesr-count-popup";
 import styles from"../../../../css/form.module.css"
@@ -84,7 +84,7 @@ console.log("loginUsername=",loginUsername)
     const socket = new SockJS(socketUrl);
     const client = Stomp.over(socket);
 
-    client.connect(headers, (frame) => {
+    client.connect(headers, (frame: IFrame) => {
       console.log('Connected: ' + frame);
       client.subscribe('/topic/onlineUsers', (message) => {
         const body = message.body;
@@ -92,21 +92,14 @@ console.log("loginUsername=",loginUsername)
         setUserCount(parseInt(body, 10)); // Update the state with new user count
         setShowPopup(true); // 팝업을 표시
       });
-      client.send('/app/userConnected', {}, {});
-    }, (error) => {
+      client.send('/app/userConnected', {}, '');
+    }, (error: unknown) => {
       console.error('STOMP Error:', error);
     });
 
     return () => {
       if (client.connected) {
-        client.send('/app/userDisconnected', headers, {}, () => {
-          console.log('User disconnected message sent');
-          client.disconnect(() => {
-            console.log('Disconnected');
-          }, (error) => {
-            console.error('Disconnection Error:', error);
-          });
-        });
+        client.send('/app/userDisconnected', {}, '')
       } else {
         console.log('No STOMP connection to send disconnection message');
       }

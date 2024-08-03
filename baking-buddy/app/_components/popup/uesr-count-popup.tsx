@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import styles from "../../../css/popup.module.css"
-
-const UserCountPopup = ({ userCount, onClose }) => {
+interface UserCountPopupProps{
+  userCount: number;
+  onClose: () => void;
+}
+const UserCountPopup:React.FC<UserCountPopupProps>  = ({ userCount, onClose }) => {
   useEffect(() => {
     // 자동으로 팝업을 닫기 위해 3초 후에 onClose 호출
     const timer = setTimeout(() => {

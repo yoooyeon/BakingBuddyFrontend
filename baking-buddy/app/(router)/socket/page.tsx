@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import { Stomp } from '@stomp/stompjs';
+import React, {useEffect, useState} from 'react';
+import {IFrame, Stomp} from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import { API_URL } from "@/app/constants";
+import {API_URL} from "@/app/constants";
 
 const SocketPage = () => {
     const [userCount, setUserCount] = useState(0);
@@ -21,7 +21,7 @@ const SocketPage = () => {
         const socket = new SockJS(socketUrl);
         const client = Stomp.over(socket);
 
-        client.connect(headers, (frame) => {
+        client.connect(headers, (frame: IFrame) => {
             console.log('Connected: ' + frame);
             // Subscribe to the topic to get the user count updates
             client.subscribe('/topic/onlineUsers', (message) => {
@@ -31,8 +31,8 @@ const SocketPage = () => {
             });
 
             // Publish a message to indicate user connection
-            client.send('/app/userConnected', {}, {});
-        }, (error) => {
+            client.send('/app/userConnected', {}, '');
+        }, (error:unknown) => {
             console.error('STOMP Error:', error);
         });
 
@@ -41,16 +41,13 @@ const SocketPage = () => {
             alert("disconnected")
             if (client.connected) {
                 // Ensure the message is sent before disconnecting
-                client.send('/app/userDisconnected', {}, {}, () => {
-                    console.log('User disconnected message sent');
+                client.send('/app/userDisconnected', {}, '');
 
-                    // Disconnect after sending the message
-                    client.disconnect(() => {
-                        console.log('Disconnected');
-                    }, (error) => {
-                        console.error('Disconnection Error:', error);
-                    });
-                });
+                // Disconnect after sending the message
+                client.disconnect(() => { // 콜백
+                    console.log('Disconnected');
+                }, headers);
+
             } else {
                 console.log('No STOMP connection to send disconnection message');
             }

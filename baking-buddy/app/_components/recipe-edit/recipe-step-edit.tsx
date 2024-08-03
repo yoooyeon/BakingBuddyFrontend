@@ -89,7 +89,7 @@ const RecipeStepEdit: React.FC<RecipeStepEditProps> = ({ recipeSteps = [], setRe
                             <p>{step.description}</p>
                             {step.stepImage && (
                                 <img
-                                    src={step.stepImage ? step.stepImage : ''}
+                                    src={typeof step.stepImage === 'string' ? step.stepImage :  ''}
                                     alt={`Step ${step.stepNumber}`}
                                     className={styles.stepImage}
                                 />
