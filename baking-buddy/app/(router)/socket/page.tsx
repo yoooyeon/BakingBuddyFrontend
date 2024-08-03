@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { Client, Stomp } from '@stomp/stompjs';
+import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { API_URL } from "@/app/constants";
 
@@ -8,19 +8,26 @@ const SocketPage = () => {
     const [userCount, setUserCount] = useState(0);
     const socketUrl = `${API_URL}/ws`; // Spring Boot WebSocket endpoint
 
+    // Function to get the token
+    const getToken = () => {
+        return localStorage.getItem("accessToken");
+    };
+
     useEffect(() => {
-        // Create a SockJS instance
+        const accessToken = getToken();
+        const headers = {
+            Authorization: accessToken ? `Bearer ${accessToken}` : ''
+        };
         const socket = new SockJS(socketUrl);
-        // Create a Stomp client using the SockJS instance
         const client = Stomp.over(socket);
 
-        // Connect to the WebSocket server
-        client.connect({}, (frame) => {
+        client.connect(headers, (frame) => {
             console.log('Connected: ' + frame);
-
-            // Subscribe to the topic
+            // Subscribe to the topic to get the user count updates
             client.subscribe('/topic/onlineUsers', (message) => {
-                setUserCount(parseInt(message.body, 10));
+                const body = message.body;
+                console.log('Received user count:', body);
+                setUserCount(parseInt(body, 10)); // Update the state with new user count
             });
 
             // Publish a message to indicate user connection
@@ -31,13 +38,22 @@ const SocketPage = () => {
 
         // Handle disconnection
         return () => {
-            client.disconnect(() => {
-                console.log('Disconnected');
-                // Publish a message to indicate user disconnection
-                client.send('/app/userDisconnected', {}, {});
-            }, (error) => {
-                console.error('Disconnection Error:', error);
-            });
+            alert("disconnected")
+            if (client.connected) {
+                // Ensure the message is sent before disconnecting
+                client.send('/app/userDisconnected', {}, {}, () => {
+                    console.log('User disconnected message sent');
+
+                    // Disconnect after sending the message
+                    client.disconnect(() => {
+                        console.log('Disconnected');
+                    }, (error) => {
+                        console.error('Disconnection Error:', error);
+                    });
+                });
+            } else {
+                console.log('No STOMP connection to send disconnection message');
+            }
         };
     }, []);
 

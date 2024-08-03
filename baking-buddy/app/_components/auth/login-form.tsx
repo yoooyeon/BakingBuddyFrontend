@@ -24,11 +24,23 @@ export default function LoginForm() {
       });
 
       if (response.ok) {
+        const result = await response.json();
+        console.log("result",result)
+        const data = result.data;
+        const accessToken = data.accessToken;
+
+        const refreshToken = data.refreshToken;
+        localStorage.setItem("accessToken",accessToken)
+        localStorage.setItem("refreshToken",refreshToken)
+        // alert(result.data)
+        const token = localStorage.getItem("accessToken");
+
         // 로그인 성공 후 쿠키가 서버에 의해 설정됩니다
         router.push('/'); // 로그인 후 메인 페이지로 이동
         window.location.reload(); // 페이지 리로드 추가
       } else {
         const result = await response.json();
+        console.log(result)
         setError(result.message || 'Invalid login credentials.');
       }
     } catch (error) {
