@@ -132,7 +132,7 @@ const Header = () => {
                 {menuOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg z-20">
                     <Link href="/mypage" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-                      프로필 수정
+                      내 프로필
                     </Link>
                     <Link href="/recipes/users" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
                       내 레시피

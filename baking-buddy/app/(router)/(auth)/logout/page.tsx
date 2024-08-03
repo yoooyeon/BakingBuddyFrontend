@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { destroyCookie } from 'nookies';
 import { API_URL } from '@/app/constants';
 
 const Logout = () => {
@@ -18,10 +17,11 @@ const Logout = () => {
         });
 
         if (response.ok) {
+          // localStorage에서 토큰 제거
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
           // 로그인 페이지로 리다이렉트
           router.push('/login');
-          router.refresh();
-
         } else {
           console.error('Failed to log out');
         }
