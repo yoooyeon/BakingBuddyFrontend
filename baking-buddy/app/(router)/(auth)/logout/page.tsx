@@ -20,6 +20,7 @@ const Logout = () => {
           // localStorage에서 토큰 제거
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
+          localStorage.removeItem('username');
           // 로그인 페이지로 리다이렉트
           router.push('/login');
         } else {
