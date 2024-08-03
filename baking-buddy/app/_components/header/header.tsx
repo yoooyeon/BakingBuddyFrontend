@@ -25,6 +25,7 @@ const Header = () => {
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
+  // Check authentication status and fetch alarms
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
@@ -35,8 +36,7 @@ const Header = () => {
 
         if (response.ok) {
           const result = await response.json();
-          const data = result.data;
-          const status = data.isAuthenticated;
+          const status = result.data.isAuthenticated;
           setIsLoggedIn(status);
         } else {
           setIsLoggedIn(false);
@@ -76,82 +76,100 @@ const Header = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        alarmRef.current && !alarmRef.current.contains(event.target as Node) &&
-        menuRef.current && !menuRef.current.contains(event.target as Node)
+          (menuRef.current && !menuRef.current.contains(event.target as Node)) ||
+          (alarmRef.current && !alarmRef.current.contains(event.target as Node))
       ) {
         setAlarmOpen(false);
         setMenuOpen(false);
       }
     };
 
+    // Add event listener to the document
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
+      // Clean up the event listener
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
   return (
-    <header className="sticky top-0 z-10 bg-background shadow">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-        <Link href="/" className="text-2xl font-bold" prefetch={false}>
-          Recipe Diary
-        </Link>
-        <nav className="flex items-center space-x-4">
-          {!isLoggedIn && (
-            <>
-              <Link href="/login" className="hover:text-primary" prefetch={false}>
-                로그인
-              </Link>
-              <Link href="/signup" className="hover:text-primary" prefetch={false}>
-                회원가입
-              </Link>
-            </>
-          )}
-          <button onClick={() => setSearchOpen(!searchOpen)} className="hover:text-primary">
-            <MagnifyingGlassIcon className="h-6 w-6" />
-            <span className="sr-only">Search</span>
-          </button>
-          {isLoggedIn && (
-            <div className="relative flex items-center space-x-4">
-              <button onClick={() => setAlarmOpen(!alarmOpen)} className="hover:text-primary relative">
-                <BellIcon className="h-6 w-6" />
-                <span className="sr-only">Notifications</span>
-                {alarmOpen && (
-                  <div ref={alarmRef} className="absolute right-0 top-8 w-72 bg-white border border-gray-200 rounded shadow-lg z-20">
-                    <Alarm alarms={alarms} setAlarmOpen={setAlarmOpen} />
+      <header className="sticky top-0 z-10 bg-background shadow">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+          <Link href="/" className="text-2xl font-bold" prefetch={false}>
+            Recipe Diary
+          </Link>
+          <nav className="flex items-center space-x-4">
+            {!isLoggedIn && (
+                <>
+                  <Link href="/login" className="hover:text-primary" prefetch={false}>
+                    로그인
+                  </Link>
+                  <Link href="/signup" className="hover:text-primary" prefetch={false}>
+                    회원가입
+                  </Link>
+                </>
+            )}
+            <button onClick={() => setSearchOpen(!searchOpen)} className="hover:text-primary">
+              <MagnifyingGlassIcon className="h-6 w-6" />
+              <span className="sr-only">Search</span>
+            </button>
+            {isLoggedIn && (
+                <div className="relative flex items-center space-x-4">
+                  <button onClick={() => setAlarmOpen(!alarmOpen)} className="hover:text-primary relative">
+                    <BellIcon className="h-6 w-6" />
+                    <span className="sr-only">Notifications</span>
+                    {alarmOpen && (
+                        <div ref={alarmRef} className="absolute right-0 top-8 w-72 bg-white border border-gray-200 rounded shadow-lg z-20">
+                          <Alarm alarms={alarms} setAlarmOpen={setAlarmOpen} />
+                        </div>
+                    )}
+                  </button>
+                  <div className="relative" ref={menuRef}>
+                    <button
+                        onClick={() => setMenuOpen(!menuOpen)}
+                        className="hover:text-primary"
+                    >
+                      <UserIcon className="h-8 w-8" />
+                    </button>
+                    {menuOpen && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg z-20">
+                          <Link
+                              href="/mypage"
+                              className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                              onClick={() => setMenuOpen(false)}
+                          >
+                            내 프로필
+                          </Link>
+                          <Link
+                              href="/recipes/users"
+                              className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                              onClick={() => setMenuOpen(false)}
+                          >
+                            내 레시피
+                          </Link>
+                          <Link
+                              href="/recipes/register"
+                              className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                              onClick={() => setMenuOpen(false)}
+                          >
+                            레시피 등록하기
+                          </Link>
+                          <Link
+                              href="/logout"
+                              className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                              onClick={() => setMenuOpen(false)}
+                          >
+                            로그아웃
+                          </Link>
+                        </div>
+                    )}
                   </div>
-                )}
-              </button>
-              <div className="relative" ref={menuRef}>
-                <button
-                  onClick={() => setMenuOpen(!menuOpen)}
-                  className="hover:text-primary"
-                >
-                  <UserIcon className="h-8 w-8" />
-                </button>
-                {menuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg z-20">
-                    <Link href="/mypage" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-                      내 프로필
-                    </Link>
-                    <Link href="/recipes/users" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-                      내 레시피
-                    </Link>
-                    <Link href="/recipes/register" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-                      레시피 등록하기
-                    </Link>
-                    <Link href="/logout" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-                      로그아웃
-                    </Link>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </nav>
-      </div>
-      {searchOpen && <Search setSearchOpen={setSearchOpen} />}
-    </header>
+                </div>
+            )}
+          </nav>
+        </div>
+        {searchOpen && <Search setSearchOpen={setSearchOpen} />}
+      </header>
   );
 };
 

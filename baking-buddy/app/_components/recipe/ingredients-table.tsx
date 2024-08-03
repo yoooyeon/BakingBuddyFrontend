@@ -6,7 +6,6 @@ interface Ingredient {
     name: string;
     amount: string;
     unitDisplayName: string;
-    // defaultServings: number;
 }
 
 interface IngredientsTableProps {

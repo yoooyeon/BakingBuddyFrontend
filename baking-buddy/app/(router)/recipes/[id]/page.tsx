@@ -15,7 +15,7 @@ const RecipeSteps = lazy(() => import('@/app/_components/recipe/recipe-steps'));
 interface Recipe {
   id: string;
   name: string;
-  username: string;
+  username: string; // 레시피 작성자
   likeCount: number;
   level: string;
   userLiked: boolean;
