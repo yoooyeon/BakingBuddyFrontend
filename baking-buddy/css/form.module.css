@@ -298,3 +298,14 @@
     border-radius: 8px;
 
 }
+
+/* Add to your CSS file */
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.animate-fade-in-out {
+    animation: fadeInOut 3s ease-out; /* 애니메이션 기간 조정 */
+}
