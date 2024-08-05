@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 
-import styles from '../../../../../css/form.module.css';
+import styles from '@/css/form.module.css';
 import { API_URL } from '@/app/constants';
 import DirectorySelect from "@/app/_components/recipe-register/directory-select";
 import IngredientEditList from "@/app/_components/recipe-edit/ingredient-edit-list";

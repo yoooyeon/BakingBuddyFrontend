@@ -1,4 +1,4 @@
-/* css/user-profile.module.css */
+/* user-profile.module.css */
 .container {
     padding: 20px;
     max-width: 800px;
@@ -14,6 +14,8 @@
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
+    display: block; /* ensure it is treated as a block element for centering */
+    margin: 0 auto; /* centers the image horizontally */
 }
 
 .username {
@@ -24,4 +26,18 @@
 .introduction {
     font-size: 1rem;
     color: #666;
+    margin-top: 10px; /* space between introduction and other elements */
+}
+.followButton {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.followButton:hover {
+    background-color: #0056b3;
 }

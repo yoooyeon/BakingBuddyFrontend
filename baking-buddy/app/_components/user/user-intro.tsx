@@ -19,8 +19,9 @@ const UserIntro = ({ userProfile }: { userProfile: UserProfileProps }) => {
                 <h1 className={styles.username}>{userProfile.nickname}</h1>
                 <h1 className={styles.username}>{userProfile.username}</h1>
                 <p className={styles.introduction}>
-                    {userProfile.introduction || "No introduction available"}
+                    {userProfile.introduction || "소개글이 아직 없습니다."}
                 </p>
+                {/*<button className={styles.followButton}>Follow</button>*/}
             </div>
         </div>
     );

@@ -7,7 +7,7 @@ import {API_URL} from '@/app/constants';
 import {Stomp, IFrame} from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import UserCountPopup from "@/app/_components/popup/uesr-count-popup";
-import styles from "../../../../css/form.module.css"
+import styles from "@/css/form.module.css"
 
 const RecipeDetails = lazy(() => import('@/app/_components/recipe/recipe-detail'));
 const IngredientsTable = lazy(() => import('@/app/_components/recipe/ingredients-table'));

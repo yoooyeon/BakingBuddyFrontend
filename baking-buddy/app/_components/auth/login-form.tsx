@@ -1,7 +1,7 @@
 "use client"
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from '../../../css/form.module.css';
+import styles from '@/css/form.module.css';
 import { API_URL } from '@/app/constants';
 
 export default function LoginForm() {

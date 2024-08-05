@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Directory from '../recipe/directory';
 import { API_URL } from '@/app/constants';
-import styles from '../../../css/directory-recipe.module.css';
+import styles from '@/css/directory-recipe.module.css';
 
 interface RecipeResponseDto {
   id: number;

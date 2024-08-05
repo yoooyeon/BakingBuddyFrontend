@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import RecipeCard from './recipe-card';
-import styles from '../../../css/directory-recipe.module.css';
+import styles from '@/css/directory-recipe.module.css';
 import { API_URL } from '@/app/constants';
 
 interface RecipeResponseDto {

@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import styles from '../../../css/form.module.css';
+import styles from '@/css/form.module.css';
 
 const TagList: React.FC<{ tags: string[], setTags: React.Dispatch<React.SetStateAction<string[]>> }> = ({
                                                                                                             tags,

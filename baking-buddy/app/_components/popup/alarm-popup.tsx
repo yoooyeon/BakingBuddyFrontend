@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import styles from '../../../css/popup.module.css';
+import styles from '@/css/popup.module.css';
 
 interface AlarmPopupProps {
     msg: string; // Define msg as a string prop

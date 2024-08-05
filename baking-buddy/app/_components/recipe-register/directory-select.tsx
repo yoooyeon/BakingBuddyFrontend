@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from '../../../css/form.module.css';
+import styles from '@/css/form.module.css';
 import { API_URL } from '@/app/constants';
 
 interface Directory {

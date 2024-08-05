@@ -2,7 +2,7 @@ import { API_URL } from "@/app/constants";
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
-import styles from '../../../css/search.module.css';
+import styles from '@/css/search.module.css';
 
 interface Autocomplete {
     name: string;

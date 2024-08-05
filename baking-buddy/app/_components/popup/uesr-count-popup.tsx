@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import styles from "../../../css/popup.module.css"
+import styles from "@/css/popup.module.css"
 interface UserCountPopupProps{
   userCount: number;
   onClose: () => void;

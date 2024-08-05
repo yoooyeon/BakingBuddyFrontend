@@ -1,5 +1,5 @@
 "use client";
-import styles from "../../css/recipe-card.module.css";
+import styles from "@/css/recipe-card.module.css";
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';

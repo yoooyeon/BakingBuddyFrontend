@@ -4,7 +4,7 @@ import DirectorySelect from './directory-select';
 import IngredientList from './ingredient-list';
 import RecipeStepForm from './recipe-step-form';
 import TagList from './tag-list';
-import styles from '../../../css/form.module.css';
+import styles from '@/css/form.module.css';
 import { API_URL } from '@/app/constants';
 import {router} from "next/client";
 

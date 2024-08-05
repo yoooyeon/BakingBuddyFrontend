@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FormEvent } from 'react';
-import styles from "../../../css/form.module.css";
+import styles from "@/css/form.module.css";
 
 // Define the shape of formData prop
 interface FormData {
