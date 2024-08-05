@@ -24,12 +24,16 @@ interface RecipeStep {
 interface Tag {
     name: string;
 }
-
+interface Writer{
+    uuid: string,
+    username:string,
+    profileImageUrl:string,
+}
 interface Recipe {
     name: string;
     dirId: number;
     id: number;
-    userId: number;
+    userId: string;
     description: string;
     username: string;
     profileImageUrl: string;
@@ -42,6 +46,7 @@ interface Recipe {
     level: string;
     likeCount: number;
     userLiked: boolean;
+    writer: Writer;
 }
 
 export default function Component() {
@@ -148,7 +153,7 @@ export default function Component() {
                                         </Card>
                                         <h3 className="text-lg font-semibold text-gray-800">{recipe.name}</h3>
                                         <p className={styles.description}>{recipe.description}</p>
-                                        <UserProfileSmall img={recipe.profileImageUrl} name={recipe.username}/>
+                                        <UserProfileSmall img={recipe.writer.profileImageUrl} username={recipe.writer.username} uuid = {recipe.writer.uuid}/>
                                     </div>
                                 ))}
                             </div>

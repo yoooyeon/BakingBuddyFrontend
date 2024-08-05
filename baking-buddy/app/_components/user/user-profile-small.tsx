@@ -1,16 +1,20 @@
 import React from 'react';
+import Link from "next/link";
 
 interface UserProfileSmallProps {
     img: string;
-    name: string;
+    username: string;
+    uuid: string;
 }
 
-const UserProfileSmall: React.FC<UserProfileSmallProps> = ({ img, name }) => {
+const UserProfileSmall: React.FC<UserProfileSmallProps> = ({img, username,uuid}) => {
     return (
-        <div className="flex items-center space-x-2">
-            <img src={img} alt={name} className="w-8 h-8 rounded-full" />
-            <div>{name}</div>
-        </div>
+        <Link href={`/user/${uuid}`}>
+            <div className="flex items-center space-x-2">
+                <img src={img} alt={username} className="w-8 h-8 rounded-full"/>
+                <div>{username}</div>
+            </div>
+        </Link>
     );
 };
 
