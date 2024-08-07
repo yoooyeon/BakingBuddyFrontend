@@ -1,22 +1,43 @@
 "use client";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { API_URL } from "@/app/constants";
 import UserIntro from "@/app/_components/user/user-intro";
+import IntroRecipes from "@/app/_components/user/intro-recipes";
+
+interface DirectoryWithRecipesResponseDto {
+    dirId: number;
+    dirName: string;
+    recipes: RecipeResponseDto[];
+}
+
+interface RecipeResponseDto {
+    id: number;
+    name: string;
+    description: string;
+    recipeImageUrl: string;
+    time: number;
+    level: string;
+    likeCount: number;
+}
 
 interface UserProfileProps {
     nickname?: string;
     profileImageUrl?: string;
     introduction?: string;
     username: string;
+    uuid: string;
 }
 
 const IntroPage = () => {
     const params = useParams();
     const uuid = params.uuid as string;
     const [userIntro, setUserIntro] = useState<UserProfileProps | null>(null);
+    const [directories, setDirectories] = useState<DirectoryWithRecipesResponseDto[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    console.log("IntroPage uuid=", uuid);
 
     useEffect(() => {
         console.log("useEffect called with uuid:", uuid);
@@ -41,6 +62,7 @@ const IntroPage = () => {
                 const data = json.data;
                 console.log("fetchIntro data:", data);
                 setUserIntro(data);
+                setDirectories(data.dirs);
             } catch (err) {
                 console.log("fetchIntro error:", err);
                 setError((err as Error).message);
@@ -66,6 +88,7 @@ const IntroPage = () => {
     return (
         <div>
             {userIntro && <UserIntro userProfile={userIntro} />}
+            {directories&&<IntroRecipes dirs={directories} />}
         </div>
     );
 };

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import styles from "@/css/form.module.css";
+import styles from "../../../css/form.module.css";
 import { API_URL } from "@/app/constants";
 import AlarmPopup from "@/app/_components/popup/alarm-popup";
 
@@ -51,7 +51,7 @@ const UserProfile = () => {
     };
 
     fetchUserProfile();
-  }, []);
+  }, []); // Empty dependency array ensures this runs only once
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
