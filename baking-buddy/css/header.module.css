@@ -1,0 +1,16 @@
+/* styles.css */
+
+.bell-icon {
+    position: relative;
+}
+
+.unread-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 0.5rem;
+    width: 0.5rem;
+    background-color: red;
+    border-radius: 50%;
+    border: 2px solid white;
+}

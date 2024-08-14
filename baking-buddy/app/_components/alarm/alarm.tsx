@@ -97,10 +97,13 @@ export default function Alarm({alarms, setAlarmOpen}: AlarmProps) {
                         <li
                             key={alarm.id}
                             className={`${styles.alarmItem} ${!alarm.read ? styles.unreadItem : ''}`}
-                            onClick={() => !alarm.read && handleAlarmClick(alarm.id)}
                         >
-                            <p className={styles.alarmMsg}>{alarm.msg}</p>
-                            {/* Optional: Add more details here */}
+                            <button
+                                className="w-full text-left"
+                                onClick={() => !alarm.read && handleAlarmClick(alarm.id)}
+                            >
+                                <p className={styles.alarmMsg}>{alarm.msg}</p>
+                            </button>
                         </li>
                     ))}
                 </ul>
