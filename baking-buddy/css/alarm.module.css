@@ -1,0 +1,51 @@
+.container {
+    padding: 16px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background-color: #f9f9f9; /* Light background for better readability */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+    color: #333; /* Darker text color for better contrast */
+}
+
+.noAlarms {
+    color: #666; /* Grey color for no alarms message */
+}
+
+.alarmList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.alarmItem {
+    border-bottom: 1px solid #ddd; /* Light border for separation */
+    padding: 12px 0;
+    transition: background-color 0.3s;
+}
+
+.alarmItem:last-child {
+    border-bottom: none; /* Remove border from the last item */
+}
+
+.alarmItem:hover {
+    background-color: #f1f1f1; /* Highlight background on hover */
+}
+
+.alarmMsg {
+    font-size: 0.875rem;
+    margin: 0;
+    color: #555; /* Slightly lighter color for message text */
+}
+
+.alarmType,
+.alarmRead {
+    font-size: 0.75rem;
+    color: #888; /* Grey color for type and read status */
+}

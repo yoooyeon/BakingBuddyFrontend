@@ -1,7 +1,10 @@
-"use client"
+// app/_components/auth/login-form.tsx
+
+"use client";
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from '@/css/form.module.css';
+import styles from '@/css/form.module.css'; // CSS 모듈 경로를 올바르게 설정해야 합니다
 import { API_URL } from '@/app/constants';
 
 export default function LoginForm() {
@@ -25,18 +28,10 @@ export default function LoginForm() {
 
       if (response.ok) {
         const result = await response.json();
-        const data = result.data;
-        const accessToken = data.accessToken;
+        localStorage.setItem("accessToken", result.data.accessToken);
+        localStorage.setItem("refreshToken", result.data.refreshToken);
+        localStorage.setItem("username", username);
 
-        const refreshToken = data.refreshToken;
-        localStorage.setItem("accessToken",accessToken)
-        localStorage.setItem("refreshToken",refreshToken)
-        // alert(result.data)
-        const token = localStorage.getItem("accessToken");
-        localStorage.setItem("username",username)
-       // alert(username+" 환영합니다")
-
-        // 로그인 성공 후 쿠키가 서버에 의해 설정됩니다
         router.push('/'); // 로그인 후 메인 페이지로 이동
         window.location.reload(); // 페이지 리로드 추가
       } else {
@@ -50,36 +45,36 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <div className={styles.inputGroup}>
-        <label htmlFor="username" className={styles.label}>Username</label>
-        <input
-          type="text"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className={styles.input}
-          required
-        />
-      </div>
-      <div className={styles.inputGroup}>
-        <label htmlFor="password" className={styles.label}>Password</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className={styles.input}
-          required
-        />
-      </div>
-      <button type="submit" className={styles.button}>
-        Login
-      </button>
-      <div className={styles.linkContainer}>
-        <a href="/signup" className={styles.link}>Don&apos;t have an account? Sign up</a>
-      </div>
-    </form>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <div className={styles.inputGroup}>
+          <label htmlFor="username" className={styles.label}>Username</label>
+          <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className={styles.input}
+              required
+          />
+        </div>
+        <div className={styles.inputGroup}>
+          <label htmlFor="password" className={styles.label}>Password</label>
+          <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={styles.input}
+              required
+          />
+        </div>
+        <button type="submit" className={styles.button}>
+          Login
+        </button>
+        <div className={styles.linkContainer}>
+          <a href="/signup" className={styles.link}>Don&apos;t have an account? Sign up</a>
+        </div>
+      </form>
   );
 }

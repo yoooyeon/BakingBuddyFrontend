@@ -11,7 +11,7 @@ interface AlarmType {
   id: number;
   msg: string;
   type: string;
-  readYn: string;
+  read: string;
 }
 
 const Header = () => {
