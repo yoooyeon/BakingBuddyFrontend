@@ -1,74 +1,113 @@
-"use client"
-import { useEffect, useState } from 'react';
-import { API_URL } from "@/app/constants";
+"use client";
+import React, {useEffect, useState} from 'react';
+import {API_URL} from "@/app/constants";
 import SockJS from 'sockjs-client';
-import { Stomp } from '@stomp/stompjs';
-
+import {Stomp} from '@stomp/stompjs';
+import styles from '@/css/alarm.module.css';
+import Link from "next/link";
+import { useRouter } from 'next/navigation';
 interface AlarmType {
-  id: number;
-  msg: string;
-  type: string;
-  read: string;
+    id: number;
+    msg: string;
+    type: string;
+    read: boolean;
 }
 
 interface AlarmProps {
-  alarms: AlarmType[];
-  setAlarmOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    alarms: AlarmType[];
+    setAlarmOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function Alarm({ alarms, setAlarmOpen }: AlarmProps) {
-  const [username, setUsername] = useState<string | null>(null);
+export default function Alarm({alarms, setAlarmOpen}: AlarmProps) {
+    const [username, setUsername] = useState<string | null>(null);
+    const [localAlarms, setLocalAlarms] = useState<AlarmType[]>(alarms);
+    const router = useRouter();
+    useEffect(() => {
+        // Update local alarms when the alarms prop changes
+        setLocalAlarms(alarms);
+    }, [alarms]);
 
-  useEffect(() => {
-    const storedUsername = localStorage.getItem("username");
-    setUsername(storedUsername);
+    useEffect(() => {
+        const storedUsername = localStorage.getItem("username");
+        setUsername(storedUsername);
 
-    if (storedUsername) {
-      let socket = new SockJS(`${API_URL}/ws`);
-      let stompClient = Stomp.over(socket);
+        if (storedUsername) {
+            const socket = new SockJS(`${API_URL}/ws`);
+            const stompClient = Stomp.over(socket);
 
-      stompClient.connect({}, onConnected, onError);
+            stompClient.connect({}, () => {
+                console.log('Connected to WebSocket');
 
-      function onConnected() {
-        console.log('Connected to WebSocket');
+                stompClient.subscribe(`/sub/alarm/${storedUsername}`, (message) => {
+                    const newAlarm = JSON.parse(message.body);
+                    console.log("New Alarm Received:", newAlarm);
+                    // Add new alarm to local state
+                    setLocalAlarms(prevAlarms => [...prevAlarms, newAlarm]);
+                });
+            }, (error) => {
+                console.error('WebSocket connection error:', error);
+            });
 
-        stompClient.subscribe(`/sub/alarm/${storedUsername}`, (message) => {
-          const newAlarm = JSON.parse(message.body);
-          console.log("New Alarm Received:", newAlarm);
-          // Update the UI or state with new alarms
-        });
-      }
+            return () => {
+                stompClient.disconnect(() => {
+                    console.log('Disconnected from WebSocket');
+                });
+            };
+        }
+    }, []);
 
-      function onError(error: string) {
-        console.error('WebSocket connection error:', error);
-      }
+    const handleAlarmClick = async (id: number) => {
+        try {
+            const response = await fetch(`${API_URL}/api/alarms/${id}/read`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
 
-      return () => {
-        stompClient.disconnect(() => {
-          console.log('Disconnected from WebSocket');
-        });
-      };
-    }
-  }, []); // Empty dependency array means this runs once when component mounts
+            if (!response.ok) {
+                throw new Error('Failed to mark alarm as read');
+            }
 
-  const validAlarms = Array.isArray(alarms) ? alarms : [];
+            // Update local state to reflect read status change
+            setLocalAlarms(prevAlarms =>
+                prevAlarms.map(alarm =>
+                    alarm.id === id ? {...alarm, read: true} : alarm
+                )
+            );
+        } catch (error) {
+            console.error('Error marking alarm as read:', error);
+        }
+    };
 
-  return (
-      <div className="p-4 max-h-80 overflow-y-auto">
-        <h1 className="text-lg font-semibold mb-4">알림</h1>
-        {validAlarms.length === 0 ? (
-            <p>No alarms to display</p>
-        ) : (
-            <ul>
-              {validAlarms.map(alarm => (
-                  <li key={alarm.id} className="border-b last:border-b-0 py-2">
-                    <p className="text-sm">{alarm.msg}</p>
-                    <p className="text-xs text-gray-500">Type: {alarm.type}</p>
-                    <p className="text-xs text-gray-500">Read: {alarm.read === 'Y' ? 'Yes' : 'No'}</p>
-                  </li>
-              ))}
-            </ul>
-        )}
-      </div>
-  );
+    const validAlarms = Array.isArray(localAlarms) ? localAlarms : [];
+
+    // Determine if there are any unread alarms
+    const hasUnreadAlarms = validAlarms.some(alarm => !alarm.read);
+
+    return (
+        <div className={`p-4 max-h-80 overflow-y-auto ${hasUnreadAlarms ? styles.containerUnread : styles.container}`}>
+            <h1 className="text-lg font-semibold mb-4">알림</h1>
+            {validAlarms.length === 0 ? (
+                <p>No alarms to display</p>
+            ) : (
+                <ul className={styles.alarmList}>
+                    {validAlarms.map(alarm => (
+                        <li
+                            key={alarm.id}
+                            className={`${styles.alarmItem} ${!alarm.read ? styles.unreadItem : ''}`}
+                            onClick={() => !alarm.read && handleAlarmClick(alarm.id)}
+                        >
+                            <p className={styles.alarmMsg}>{alarm.msg}</p>
+                            {/* Optional: Add more details here */}
+                        </li>
+                    ))}
+                </ul>
+            )}
+            <div className={styles.viewAllLink}>
+                <button className={styles.viewAllLinkBtn} onClick={() => router.push('/alarms')}>모든 알림 보기</button>
+            </div>
+        </div>
+    );
 }

@@ -9,7 +9,7 @@ interface Alarm {
     id: number;
     msg: string;
     type: string;
-    read: string;
+    read: boolean;
 }
 
 export default function AlarmPage() {
@@ -33,7 +33,7 @@ export default function AlarmPage() {
                 }
 
                 const json = await response.json();
-                const data = json.data
+                const data = json.data;
                 setAlarms(Array.isArray(data) ? data : []); // Ensure data is an array
             } catch (error) {
                 console.error('Error fetching alarms:', error);

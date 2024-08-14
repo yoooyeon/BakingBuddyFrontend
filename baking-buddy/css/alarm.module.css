@@ -1,51 +1,102 @@
+/* alarm.module.css */
+
 .container {
-    padding: 16px;
+    padding: 1rem;
     max-height: 80vh;
     overflow-y: auto;
-    background-color: #f9f9f9; /* Light background for better readability */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
+.containerUnread {
+    /* Styles for when there are unread alarms */
+    padding: 16px;
+    background-color: #e9ecef; /* Lighter color or any other highlight */
+    border: 1px solid #dee2e6; /* Optional: border to indicate change */
+    border-radius: 8px;
+}
 .title {
     font-size: 1.25rem;
     font-weight: bold;
-    margin-bottom: 16px;
-    color: #333; /* Darker text color for better contrast */
+    margin-bottom: 1rem;
 }
 
 .noAlarms {
-    color: #666; /* Grey color for no alarms message */
+    color: #888;
 }
 
 .alarmList {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
     margin: 0;
 }
 
+.alarmListUnread {
+    background-color: #f9f9f9; /* Background color for lists with unread items */
+}
+
 .alarmItem {
-    border-bottom: 1px solid #ddd; /* Light border for separation */
-    padding: 12px 0;
-    transition: background-color 0.3s;
+    cursor: default; /* Default cursor for items */
+    padding: 0.75rem;
+    border-bottom: 1px solid #ddd;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    position: relative;
 }
 
-.alarmItem:last-child {
-    border-bottom: none; /* Remove border from the last item */
+.unreadItem {
+    background-color: cornflowerblue;
+
+    /*background-color: #fef2f2; !* Background color for unread items *!*/
+    cursor: pointer; /* Pointer cursor for clickable items */
 }
 
-.alarmItem:hover {
-    background-color: #f1f1f1; /* Highlight background on hover */
+.unreadItem:hover {
+    transform: scale(1.02); /* Slightly enlarge item on hover */
+}
+
+.unreadItem:active {
+    background-color: cornflowerblue; /* Light red background when clicked */
+}
+
+.unreadItem::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #f9f9f9;
+    transform: translateY(-50%);
+    transition: background-color 0.2s ease;
+}
+
+.unreadItem:hover::after {
+    background-color: #ff5722; /* Color change on hover for unread items */
+    content: '✓'; /* Checkmark symbol */
+    color: white; /* Checkmark color */
+    font-size: 12px; /* Adjust size of checkmark */
+    text-align: center;
+    line-height: 16px; /* Center the checkmark vertically */
 }
 
 .alarmMsg {
-    font-size: 0.875rem;
+    font-size: 1rem;
+    color: #333;
+    font-weight: normal;
     margin: 0;
-    color: #555; /* Slightly lighter color for message text */
+    padding: 0;
+    line-height: 1.5;
+    overflow-wrap: break-word;
 }
 
-.alarmType,
-.alarmRead {
-    font-size: 0.75rem;
-    color: #888; /* Grey color for type and read status */
+
+.viewAllLink {
+    width: 100%;
+    height: 100%;
+    margin-top: 16px;
+    text-align: center;
 }
+.viewAllLinkBtn{
+    width: 100%;
+    height: 100%;
+}
+

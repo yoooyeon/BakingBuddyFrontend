@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { API_URL } from "@/app/constants";
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
@@ -9,7 +9,7 @@ interface AlarmType {
     id: number;
     msg: string;
     type: string;
-    read: string;
+    read: boolean;
 }
 
 interface AlarmProps {
@@ -19,6 +19,12 @@ interface AlarmProps {
 
 const AlarmDetail = ({ alarms, setAlarmOpen }: AlarmProps) => {
     const [username, setUsername] = useState<string | null>(null);
+    const [localAlarms, setLocalAlarms] = useState<AlarmType[]>(alarms);
+
+    useEffect(() => {
+        // Update local alarms when the alarms prop changes
+        setLocalAlarms(alarms);
+    }, [alarms]);
 
     useEffect(() => {
         const storedUsername = localStorage.getItem("username");
@@ -28,21 +34,18 @@ const AlarmDetail = ({ alarms, setAlarmOpen }: AlarmProps) => {
             const socket = new SockJS(`${API_URL}/ws`);
             const stompClient = Stomp.over(socket);
 
-            stompClient.connect({}, onConnected, onError);
-
-            function onConnected() {
+            stompClient.connect({}, () => {
                 console.log('Connected to WebSocket');
 
                 stompClient.subscribe(`/sub/alarm/${storedUsername}`, (message) => {
                     const newAlarm = JSON.parse(message.body);
                     console.log("New Alarm Received:", newAlarm);
-                    // Update the UI or state with new alarms
+                    // Update local alarms with new alarms from WebSocket
+                    setLocalAlarms(prevAlarms => [...prevAlarms, newAlarm]);
                 });
-            }
-
-            function onError(error: string) {
+            }, (error) => {
                 console.error('WebSocket connection error:', error);
-            }
+            });
 
             return () => {
                 stompClient.disconnect(() => {
@@ -50,22 +53,49 @@ const AlarmDetail = ({ alarms, setAlarmOpen }: AlarmProps) => {
                 });
             };
         }
-    }, []); // Empty dependency array means this runs once when component mounts
+    }, []);
 
-    const validAlarms = Array.isArray(alarms) ? alarms : [];
+    const handleAlarmClick = async (id: number) => {
+        try {
+            const response = await fetch(`${API_URL}/api/alarms/${id}/read`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to mark alarm as read');
+            }
+
+            // Update local state to reflect read status change
+            setLocalAlarms(prevAlarms =>
+                prevAlarms.map(alarm =>
+                    alarm.id === id ? { ...alarm, read: true } : alarm
+                )
+            );
+        } catch (error) {
+            console.error('Error marking alarm as read:', error);
+        }
+    };
+
+    const hasUnreadAlarms = localAlarms.some(alarm => !alarm.read);
 
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>알림</h1>
-            {validAlarms.length === 0 ? (
+            {localAlarms.length === 0 ? (
                 <p className={styles.noAlarms}>No alarms to display</p>
             ) : (
-                <ul className={styles.alarmList}>
-                    {validAlarms.map(alarm => (
-                        <li key={alarm.id} className={styles.alarmItem}>
+                <ul className={hasUnreadAlarms ? styles.alarmListUnread : styles.alarmList}>
+                    {localAlarms.map(alarm => (
+                        <li
+                            key={alarm.id}
+                            className={`${styles.alarmItem} ${!alarm.read ? styles.unreadItem : ''}`}
+                            onClick={() => !alarm.read && handleAlarmClick(alarm.id)}
+                        >
                             <p className={styles.alarmMsg}>{alarm.msg}</p>
-                            <p className={styles.alarmType}>Type: {alarm.type}</p>
-                            <p className={styles.alarmRead}>Read: {alarm.read === 'Y' ? 'Yes' : 'No'}</p>
                         </li>
                     ))}
                 </ul>
