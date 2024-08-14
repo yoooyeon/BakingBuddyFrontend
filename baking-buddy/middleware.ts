@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
     const token = request.cookies.get('accessToken')?.value;
 
     // 로그인이 필요한 페이지를 설정
-    const loginRequiredPaths = ['/recipes/register', '/mypage', '/alarms', '/recipes/users'];
+    const loginRequiredPaths = ['/recipes/register', '/mypage', '/alarms', '/recipes/users', '/recipes'];
 
     // 요청 URL이 로그인이 필요한 경로인지 확인
     const requiresAuth = loginRequiredPaths.some(path => request.nextUrl.pathname.startsWith(path));

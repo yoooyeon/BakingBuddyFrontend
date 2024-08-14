@@ -10,7 +10,6 @@ import StarIcon from '@/components/ui/icon/star';
 interface Review {
   username: string;
   avatarUrl: string;
-  rating: number;
   comment: string;
   timeAgo: string;
 }

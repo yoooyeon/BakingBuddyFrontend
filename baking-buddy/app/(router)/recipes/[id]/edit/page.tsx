@@ -109,7 +109,6 @@ export default function RecipeEditPage() {
         const formData = new FormData();
         formData.append('recipe', new Blob([JSON.stringify(recipeData)], { type: 'application/json' }));
         if (recipeImage) {
-            console.log("recipeImage:",recipeImage)
             formData.append('recipeImage', recipeImage, recipeImage.name);
         }
         try {
@@ -125,7 +124,6 @@ export default function RecipeEditPage() {
             }
 
             const responseData = await response.json();
-            console.log("responseData",responseData)
             // Handle steps update
             for (const step of recipeSteps) {
                 const stepFormData = new FormData();

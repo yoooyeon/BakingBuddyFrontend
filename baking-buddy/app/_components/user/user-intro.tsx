@@ -30,7 +30,6 @@ const UserIntro = ({userProfile}: { userProfile: UserProfileProps }) => {
                 if (response.ok) {
                     const result = await response.json();
                     setIsFollowing(result.message === 'Following');
-                    console.log("json=", result.message);
                 } else {
                     console.error("Error fetching user profile:", response.statusText);
                 }

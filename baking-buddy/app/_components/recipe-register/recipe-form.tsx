@@ -90,7 +90,6 @@ export default function RecipeForm() {
 
                 const stepResponseJson = await stepResponse.json();
                 const data = stepResponseJson.data
-                console.log(data)
                 router.push(`/recipes/${data.id}`);
 
             }

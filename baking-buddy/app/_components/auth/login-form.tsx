@@ -25,7 +25,6 @@ export default function LoginForm() {
 
       if (response.ok) {
         const result = await response.json();
-        console.log("result",result)
         const data = result.data;
         const accessToken = data.accessToken;
 
@@ -42,7 +41,6 @@ export default function LoginForm() {
         window.location.reload(); // 페이지 리로드 추가
       } else {
         const result = await response.json();
-        console.log(result)
         setError(result.message || 'Invalid login credentials.');
       }
     } catch (error) {

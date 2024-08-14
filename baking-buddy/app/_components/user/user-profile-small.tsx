@@ -8,7 +8,6 @@ interface UserProfileSmallProps {
 }
 
 const UserProfileSmall: React.FC<UserProfileSmallProps> = ({ img, username, uuid }) => {
-    console.log("UserProfileSmall uuid=",uuid)
     return (
         <Link href={`/user/${uuid}`} >
             <div className={styles.container}>

@@ -40,7 +40,6 @@ const UserRecipes = () => {
         }
         const json = await response.json();
         const data = json.data;
-        console.log(data)
         if (Array.isArray(data)) {
           setDirectories(data);
         } else {

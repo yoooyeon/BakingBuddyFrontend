@@ -60,7 +60,6 @@ const IntroPage = () => {
                 }
                 const json = await response.json();
                 const data = json.data;
-                console.log("fetchIntro data:", data);
                 setUserIntro(data);
                 setDirectories(data.dirs);
             } catch (err) {

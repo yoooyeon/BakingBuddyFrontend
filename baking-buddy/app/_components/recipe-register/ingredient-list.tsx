@@ -36,7 +36,6 @@ const IngredientList: React.FC<{
                 }
                 const json = await response.json();
                 const data = json.data;
-                console.log(data)
                 setUnits(Array.isArray(data) ? data : []);
                 setLoading(false);
             } catch (error) {

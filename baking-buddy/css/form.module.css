@@ -309,3 +309,8 @@
 .animate-fade-in-out {
     animation: fadeInOut 3s ease-out; /* 애니메이션 기간 조정 */
 }
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}

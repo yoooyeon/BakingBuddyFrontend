@@ -98,7 +98,18 @@ const Header = () => {
           <Link href="/" className="text-2xl font-bold" prefetch={false}>
             Recipe Diary
           </Link>
+          <Link href="/" className="hover:text-primary" prefetch={false}>
+            팔로잉
+          </Link>
+          <Link href="/recipes" className="hover:text-primary" prefetch={false}>
+            레시피
+          </Link>
+          <Link href="/products" className="hover:text-primary" prefetch={false}>
+            상품
+          </Link>
           <nav className="flex items-center space-x-4">
+
+
             {!isLoggedIn && (
                 <>
                   <Link href="/login" className="hover:text-primary" prefetch={false}>
@@ -153,6 +164,20 @@ const Header = () => {
                               onClick={() => setMenuOpen(false)}
                           >
                             레시피 등록하기
+                          </Link>
+                          <Link
+                              href="/products/users"
+                              className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                              onClick={() => setMenuOpen(false)}
+                          >
+                            내 상품
+                          </Link>
+                          <Link
+                              href="/products/register"
+                              className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                              onClick={() => setMenuOpen(false)}
+                          >
+                            상품 등록하기
                           </Link>
                           <Link
                               href="/logout"

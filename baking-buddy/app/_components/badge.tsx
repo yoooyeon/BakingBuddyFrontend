@@ -6,7 +6,6 @@ interface BadgeProps {
 }
 
 const Badge: React.FC<BadgeProps> = ({ name, imageSrc }) => {
-    console.log(imageSrc); // Useful for debugging
 
     return (
         <span className="inline-flex items-center px-2 py-1 text-xs font-medium text-white bg-green-400 rounded-md mr-1">
