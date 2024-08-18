@@ -6,7 +6,8 @@ import Search from '../search/search';
 import {useRouter} from 'next/navigation';
 import {API_URL} from '@/app/constants';
 import Alarm from '../alarm/alarm';
-import styles from '@/css/header.module.css'
+import styles from '@/css/header.module.css';
+import {useAuth} from '@/context/AuthContext';
 
 interface AlarmType {
     id: number;
@@ -16,7 +17,7 @@ interface AlarmType {
 }
 
 const Header = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const {isLoggedIn, role, setIsLoggedIn} = useAuth();
     const [searchOpen, setSearchOpen] = useState<boolean>(false);
     const [alarmOpen, setAlarmOpen] = useState<boolean>(false);
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -26,7 +27,7 @@ const Header = () => {
     const alarmRef = useRef<HTMLDivElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
-
+    console.log("header:", role)
     useEffect(() => {
         const checkAuthStatus = async () => {
             try {
@@ -40,6 +41,24 @@ const Header = () => {
                     const status = result.data.isAuthenticated;
                     setIsLoggedIn(status);
                 } else {
+                    if (response.status === 401) {
+                        try {
+                            const response = await fetch(`${API_URL}/api/refresh-token`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                credentials: 'include',
+                            });
+                            const json = await response.json();
+                            const data = json.data;
+                            setIsLoggedIn(true);
+                            router.push("/");
+                        } catch (error) {
+                            console.error('Token refresh failed:', error);
+                            return null;
+                        }
+                    }
                     setIsLoggedIn(false);
                 }
             } catch (error) {
@@ -61,9 +80,9 @@ const Header = () => {
                     });
                     if (response.ok) {
                         const result = await response.json();
-                        setAlarms(result.data);
-                        // Check for unread alarms
-                        setHasUnreadAlarms(result.data.some(alarm => !alarm.read));
+                        const alarmsData: AlarmType[] = result.data;
+                        setAlarms(alarmsData);
+                        setHasUnreadAlarms(alarmsData.some(alarm => !alarm.read));
                     } else {
                         console.error('Error fetching alarms:', response.statusText);
                     }
@@ -74,23 +93,6 @@ const Header = () => {
             fetchAlarms();
         }
     }, [isLoggedIn]);
-
-    // useEffect(() => {
-    //   // const handleClickOutside = (event: MouseEvent) => {
-    //   //   if (
-    //   //       (menuRef.current && !menuRef.current.contains(event.target as Node)) ||
-    //   //       (alarmRef.current && !alarmRef.current.contains(event.target as Node))
-    //   //   ) {
-    //   //     setAlarmOpen(false);
-    //   //     setMenuOpen(false);
-    //   //   }
-    //   // };
-    //
-    //   // document.addEventListener('mousedown', handleClickOutside);
-    //   return () => {
-    //     document.removeEventListener('mousedown', handleClickOutside);
-    //   };
-    // }, []);
 
     return (
         <header className="sticky top-0 z-10 bg-background shadow">
@@ -157,34 +159,62 @@ const Header = () => {
                                         >
                                             내 프로필
                                         </Link>
-                                        <Link
-                                            href="/recipes/users"
-                                            className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                                            onClick={() => setMenuOpen(false)}
-                                        >
-                                            내 레시피
-                                        </Link>
-                                        <Link
-                                            href="/recipes/register"
-                                            className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                                            onClick={() => setMenuOpen(false)}
-                                        >
-                                            레시피 등록하기
-                                        </Link>
-                                        <Link
-                                            href="/products/users"
-                                            className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                                            onClick={() => setMenuOpen(false)}
-                                        >
-                                            내 상품
-                                        </Link>
-                                        <Link
-                                            href="/products/register"
-                                            className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                                            onClick={() => setMenuOpen(false)}
-                                        >
-                                            상품 등록하기
-                                        </Link>
+                                        {role === 'ADMIN' && (
+                                            <>
+                                                <Link
+                                                    href="/admin/reports"
+                                                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                                                    onClick={() => setMenuOpen(false)}
+                                                >
+                                                    신고 관리하기
+                                                </Link>
+                                                <Link
+                                                    href="/admin/authorities"
+                                                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                                                    onClick={() => setMenuOpen(false)}
+                                                >
+                                                    권한 관리하기
+                                                </Link>
+                                            </>
+
+                                        )}
+                                        {role === 'EDITOR' && (
+                                            <>
+                                                <Link
+                                                    href="/recipes/users"
+                                                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                                                    onClick={() => setMenuOpen(false)}
+                                                >
+                                                    내 레시피
+                                                </Link>
+                                                <Link
+                                                    href="/recipes/register"
+                                                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                                                    onClick={() => setMenuOpen(false)}
+                                                >
+                                                    레시피 등록하기
+                                                </Link>
+                                            </>
+
+                                        )}
+                                        {role === 'SELLER' && (
+                                            <>
+                                                <Link
+                                                    href="/products/users"
+                                                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                                                    onClick={() => setMenuOpen(false)}
+                                                >
+                                                    내 상품
+                                                </Link>
+                                                <Link
+                                                    href="/products/register"
+                                                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                                                    onClick={() => setMenuOpen(false)}
+                                                >
+                                                    상품 등록하기
+                                                </Link>
+                                            </>
+                                        )}
                                         <Link
                                             href="/logout"
                                             className="block px-4 py-2 text-gray-800 hover:bg-gray-100"

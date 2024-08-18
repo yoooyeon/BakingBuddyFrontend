@@ -1,13 +1,20 @@
-
 "use client";
-import { useEffect, useState } from "react";
-import { API_URL } from "@/app/constants";
+import {useEffect, useState} from "react";
+import {API_URL} from "@/app/constants";
 import Product from "@/app/_components/product/product";
+
+interface ProductParam {
+    id: string;
+    name: string;
+    price: number;
+    description: string;
+    productImageUrl: string;
+}
 
 const ProductPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [products, setProducts] = useState<Product[]>([]);
+    const [products, setProducts] = useState<ProductParam[]>([]);
 
     const fetchProducts = async () => {
         try {
@@ -51,7 +58,7 @@ const ProductPage = () => {
     return (
         <div>
             {products.map((product) => (
-                <Product key={product.id} product={product} />
+                <Product key={product.id} product={product}/>
             ))}
         </div>
     );

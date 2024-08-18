@@ -44,7 +44,7 @@ export default function Alarm({alarms, setAlarmOpen}: AlarmProps) {
                     // Add new alarm to local state
                     setLocalAlarms(prevAlarms => [...prevAlarms, newAlarm]);
                 });
-            }, (error) => {
+            }, (error:any) => {
                 console.error('WebSocket connection error:', error);
             });
 
@@ -76,7 +76,7 @@ export default function Alarm({alarms, setAlarmOpen}: AlarmProps) {
                     alarm.id === id ? {...alarm, read: true} : alarm
                 )
             );
-        } catch (error) {
+        } catch (error:any) {
             console.error('Error marking alarm as read:', error);
         }
     };
@@ -88,7 +88,9 @@ export default function Alarm({alarms, setAlarmOpen}: AlarmProps) {
 
     return (
         <div className={`p-4 max-h-80 overflow-y-auto ${hasUnreadAlarms ? styles.containerUnread : styles.container}`}>
-            <h1 className="text-lg font-semibold mb-4">알림</h1>
+            <Link href="/alarms"><h1 className="text-lg font-semibold mb-4" style={{ width: '100%' }}>알림</h1></Link>
+
+
             {validAlarms.length === 0 ? (
                 <p>No alarms to display</p>
             ) : (

@@ -43,7 +43,7 @@ const AlarmDetail = ({ alarms, setAlarmOpen }: AlarmProps) => {
                     // Update local alarms with new alarms from WebSocket
                     setLocalAlarms(prevAlarms => [...prevAlarms, newAlarm]);
                 });
-            }, (error) => {
+            }, (error:any) => {
                 console.error('WebSocket connection error:', error);
             });
 

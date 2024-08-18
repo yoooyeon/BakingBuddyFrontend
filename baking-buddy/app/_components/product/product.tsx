@@ -1,7 +1,7 @@
 import styles from '@/css/product-list.module.css';
 import Link from "next/link";
 
-interface Product {
+interface ProductParam {
     id: string;
     name: string;
     price: number;
@@ -9,7 +9,7 @@ interface Product {
     productImageUrl: string;
 }
 
-const Product = ({product}: { product: Product }) => {
+const Product = ({product}: { product: ProductParam }) => {
     console.log(product.id)
     return (
         <Link href={`/products/${product.id}`}>

@@ -73,7 +73,7 @@ const HomePage = () => {
             if (fetchedRecipes.length === 0) {
                 setHasMore(false);
             }
-        } catch (error) {
+        } catch (error:any) {
             console.error("Error fetching recipes:", error);
         } finally {
             setLoading(false);

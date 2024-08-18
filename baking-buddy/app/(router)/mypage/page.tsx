@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from 'react';
-import Modal from '@/app/_components/Modal';
+import Modal from '@/app/_components/modal';
 import UserProfileSmall from '@/app/_components/user/user-profile-small';
 import UserProfile from '@/app/_components/user/user-profile';
 import { API_URL } from '@/app/constants';

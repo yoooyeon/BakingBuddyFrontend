@@ -15,6 +15,7 @@ const Review = lazy(() => import('@/app/_components/review/review')); // Lazy lo
 const RecipeDetails = lazy(() => import('@/app/_components/recipe/recipe-detail'));
 const IngredientsTable = lazy(() => import('@/app/_components/recipe/ingredients-table'));
 const RecipeSteps = lazy(() => import('@/app/_components/recipe/recipe-steps'));
+const Product = lazy(() => import('@/app/_components/product/product'));
 
 interface ReviewProp {
     content: string;
@@ -42,12 +43,21 @@ interface Recipe {
     servings: number;
 }
 
+interface Product {
+    id: string;
+    name: string;
+    price: number;
+    description: string;
+    productImageUrl: string;
+}
+
 export default function RecipeDetailPage() {
     const loginUsername = localStorage.getItem('username');
     const params = useParams();
     const recipeId = params.id as string;
     const [isDeleting, setIsDeleting] = useState(false);
     const [recipe, setRecipe] = useState<Recipe | null>(null);
+    const [product, setProduct] = useState<Product[] | null>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     // const [reviews, setReviews] = useState<ReviewProp[]>([]);
@@ -131,7 +141,26 @@ export default function RecipeDetailPage() {
             console.error((err as Error).message);
         }
     };
-
+    const fetchProduct = async () => {
+        try {
+            const response = await fetch(`${API_URL}/api/recommendations/recipes/${recipeId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const json = await response.json();
+            const data = json.data;
+            console.log("recom",data)
+            setProduct(data)
+        } catch (err) {
+            console.error((err as Error).message);
+        }
+    }
     const handleReviewSubmitted = () => {
         fetchReview(); // 리뷰 제출 후 리뷰 리스트를 새로 고칩니다.
     };
@@ -169,6 +198,7 @@ export default function RecipeDetailPage() {
     useEffect(() => {
         fetchRecipe();
         fetchReview();
+        fetchProduct();
     }, [recipeId]);
 
     if (loading) {
@@ -204,7 +234,11 @@ export default function RecipeDetailPage() {
                 <Review reviews={reviews}/>
             </Suspense>
             <ReviewForm recipeId={recipeId} onReviewSubmit={handleReviewSubmitted}/>
-
+            <Suspense fallback={<h1>Loading products...</h1>}>
+                {product && product.map((prod) => (
+                    <Product key={prod.id} product={prod} />
+                ))}
+            </Suspense>
             {loginUsername === recipe.username && (
                 <div className={styles.buttonContainer}>
                     <Link href={`/recipes/${recipeId}/edit`}>

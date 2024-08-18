@@ -35,7 +35,7 @@ export default function AlarmPage() {
                 const json = await response.json();
                 const data = json.data;
                 setAlarms(Array.isArray(data) ? data : []); // Ensure data is an array
-            } catch (error) {
+            } catch (error:any) {
                 console.error('Error fetching alarms:', error);
             }
         };
@@ -60,7 +60,7 @@ export default function AlarmPage() {
                     // Update alarms state to include new alarm
                     setAlarms(prevAlarms => [...prevAlarms, newAlarm]);
                 });
-            }, (error) => {
+            }, (error :any) => {
                 console.error('WebSocket connection error:', error);
             });
 

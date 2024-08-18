@@ -37,7 +37,7 @@ export default function SignupPage() {
     event.preventDefault();
 
     try {
-      const response = await fetch(`${API_URL}/signup`, { // Ensure protocol is included
+      const response = await fetch(`${API_URL}/api/signup`, { // Ensure protocol is included
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -54,7 +54,7 @@ export default function SignupPage() {
         const result = await response.json();
         setError(result.message || "An error occurred during signup.");
       }
-    } catch (error) {
+    } catch (error:any) {
       // Handle network or other errors
       setError("An unexpected error occurred. Please try again.");
       console.error("Signup error:", error);
