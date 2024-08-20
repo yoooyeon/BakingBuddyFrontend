@@ -175,6 +175,13 @@ const Header = () => {
                                                 >
                                                     권한 관리하기
                                                 </Link>
+                                                <Link
+                                                    href="/admin/recipe"
+                                                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                                                    onClick={() => setMenuOpen(false)}
+                                                >
+                                                    메인 레시피 변경하기
+                                                </Link>
                                             </>
 
                                         )}

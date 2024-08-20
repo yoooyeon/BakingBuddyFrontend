@@ -10,6 +10,7 @@ import styles from "@/css/recipe-card.module.css";
 import axios from "axios";
 import {API_URL} from "@/app/constants";
 import {parseCookies} from "nookies";
+import MainRecipe from "@/app/_components/main/main-recipe";
 
 interface Ingredient {
     name: string;
@@ -24,11 +25,13 @@ interface RecipeStep {
 interface Tag {
     name: string;
 }
-interface Writer{
+
+interface Writer {
     uuid: string,
-    username:string,
-    profileImageUrl:string,
+    username: string,
+    profileImageUrl: string,
 }
+
 interface Recipe {
     name: string;
     dirId: number;
@@ -48,21 +51,27 @@ interface Recipe {
     userLiked: boolean;
     writer: Writer;
 }
-const RecipePage=()=>{
+
+const RecipePage = () => {
     const router = useRouter();
     const [recipes, setRecipes] = useState<Recipe[]>([]);
+    const [mainRecipes, setMainRecipes] = useState<Recipe[]>([]);
     const [currentPage, setCurrentPage] = useState(0);
     const recipesPerPage = 4;
     const blankHeartImgPath = "/image/blank-heart.png";
-
-    // useEffect(() => {
-    //     const cookies = parseCookies();
-    //     const token = cookies.accessToken;
-    //     if (!token) {
-    //         router.push('/login');
-    //     }
-    // }, [router]);
-
+    useEffect(() => {
+        axios.get(`${API_URL}/api/main/recipes`, {
+            withCredentials: true
+        })
+            .then((response) => {
+                const data = response.data.data;
+                console.log(data)
+                setMainRecipes(Array.isArray(data) ? data : []);
+            })
+            .catch((error) => {
+                console.error('Error fetching recipes:', error);
+            });
+    }, []);
     useEffect(() => {
         axios.get(`${API_URL}/api/recipes`, {
             withCredentials: true
@@ -93,33 +102,16 @@ const RecipePage=()=>{
             <main className="container mx-auto py-8 md:py-12">
                 <section>
                     {/* Main Recipe */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="relative">
-                            <img
-                                src="/image/kimbab.png"
-                                alt="Main Recipe"
-                                className="w-full h-auto max-h-96 object-cover rounded-lg"
-                            />
-                        </div>
-                        <div className="flex flex-col justify-center items-start p-4">
-                            <h2 className="text-2xl font-bold mb-4">Main Recipe Title</h2>
-                            <p className="text-lg mb-6">This is a brief description of the main recipe. It includes key highlights and features of the dish.</p>
-                            <div className="text-gray-700">
-                                <p className="mb-2">Ingredients: Lorem ipsum, dolor sit amet, consectetur adipiscing elit.</p>
-                                <p className="mb-2">Tags: #tag1, #tag2, #tag3</p>
-                                <p className="mb-2">Time: 30분</p>
-                                <p className="mb-2">Level: 중급</p>
-                            </div>
-                        </div>
-                    </div>
+                    {mainRecipes && mainRecipes.length > 0 ? (
+                        <MainRecipe recipes={mainRecipes}/>
+                    ) : (<div></div>)}
 
-                    <div className="mt-8">
+                    < div className="mt-8">
                         <h2 className="text-2xl font-bold mb-4">Latest Recipes</h2>
-
-                        {/* Other Recipes */}
                         <div className="relative">
                             <div className="absolute left-0 top-1/2 transform -translate-y-1/2">
-                                <button onClick={handlePreviousPage} disabled={currentPage === 0} className="flex items-center">
+                                <button onClick={handlePreviousPage} disabled={currentPage === 0}
+                                        className="flex items-center">
                                     <ArrowLeftIcon className="h-6 w-6"/>
                                 </button>
                             </div>
@@ -152,12 +144,16 @@ const RecipePage=()=>{
                                         </Card>
                                         <h3 className="text-lg font-semibold text-gray-800">{recipe.name}</h3>
                                         <p className={styles.description}>{recipe.description}</p>
-                                        <UserProfileSmall img={recipe.writer.profileImageUrl} username={recipe.writer.username} uuid = {recipe.writer.uuid}/>
+                                        <UserProfileSmall img={recipe.writer.profileImageUrl}
+                                                          username={recipe.writer.username}
+                                                          uuid={recipe.writer.uuid}/>
                                     </div>
                                 ))}
                             </div>
                             <div className="absolute right-0 top-1/2 transform -translate-y-1/2">
-                                <button onClick={handleNextPage} disabled={(currentPage + 1) * recipesPerPage >= recipes.length} className="flex items-center">
+                                <button onClick={handleNextPage}
+                                        disabled={(currentPage + 1) * recipesPerPage >= recipes.length}
+                                        className="flex items-center">
                                     <ArrowRightIcon className="h-6 w-6"/>
                                 </button>
                             </div>
@@ -166,6 +162,7 @@ const RecipePage=()=>{
                 </section>
             </main>
         </div>
-    );
+    )
+        ;
 }
 export default RecipePage;

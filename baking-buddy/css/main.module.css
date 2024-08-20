@@ -1,0 +1,92 @@
+.carouselContainer {
+    position: relative;
+    max-width: 100%;
+    height: 500px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    position: relative;
+}
+
+.carouselImageWrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carouselImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.carouselContent {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 15px;
+    border-radius: 8px;
+    max-width: 70%;
+}
+
+.carouselTitle {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.carouselDescription {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.carouselDetails {
+    display: flex;
+    flex-direction: column;
+}
+
+.detailItem {
+    margin-bottom: 5px;
+}
+
+.carouselButtonLeft,
+.carouselButtonRight {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 2rem;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 50%;
+}
+
+.carouselButtonLeft {
+    left: 10px;
+}
+
+.carouselButtonRight {
+    right: 10px;
+}
+
+.carouselButtonLeft:hover,
+.carouselButtonRight:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
