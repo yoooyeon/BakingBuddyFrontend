@@ -25,7 +25,6 @@ const ReportPage = () => {
                     withCredentials: true
                 });
                 const data = response.data.data; // Adjust based on your API response structure
-                console.log(data);
                 setReports(data); // Update state with fetched data
             } catch (error) {
                 console.error('Error fetching reports:', error);

@@ -23,7 +23,6 @@ export default function ProductDetailPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
-    console.log("productId", productId)
     const handleDelete = async () => {
         if (!product) {
             console.error("No product data available for deletion");

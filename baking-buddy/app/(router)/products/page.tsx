@@ -30,7 +30,6 @@ const ProductPage = () => {
             }
             const json = await response.json();
             const data = json.data;
-            console.log(data);
             setProducts(data);
             setLoading(false);
         } catch (err) {

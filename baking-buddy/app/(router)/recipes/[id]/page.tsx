@@ -135,7 +135,6 @@ export default function RecipeDetailPage() {
                 throw new Error('Network response was not ok');
             }
             const json = await response.json();
-            console.log(json.data)
             setReviews(json.data);
         } catch (err) {
             console.error((err as Error).message);

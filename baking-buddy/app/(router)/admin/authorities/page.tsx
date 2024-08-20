@@ -28,7 +28,6 @@ const AuthoritiesPage = () => {
                     withCredentials: true
                 });
                 const data = response.data.data; // Adjust based on your API response structure
-                console.log(data);
                 setUserAuthorities(data); // Update state with fetched data
             } catch (error) {
                 console.error('Error fetching authority requests:', error);

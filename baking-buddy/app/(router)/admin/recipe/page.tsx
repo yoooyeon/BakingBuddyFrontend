@@ -47,7 +47,6 @@ const AdminRecipePage = () => {
                 });
                 const json = response.data;
                 const data = json.data;
-                console.log(data);
                 setMainRecipes(data); // Update state with fetched data
             } catch (error) {
                 console.error('Error fetching setMainRecipes requests:', error);
