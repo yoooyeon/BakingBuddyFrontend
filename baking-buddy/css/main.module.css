@@ -15,6 +15,12 @@
     max-width: 1200px;
     height: 100%;
     position: relative;
+    cursor: pointer; /* 클릭 가능성 강조 */
+    transition: transform 0.3s ease; /* 클릭 시 애니메이션 효과 */
+}
+
+.carousel:hover {
+    transform: scale(1.02); /* 호버 시 약간의 확대 효과 */
 }
 
 .carouselImageWrapper {
@@ -76,6 +82,7 @@
     cursor: pointer;
     z-index: 10;
     border-radius: 50%;
+    transition: background-color 0.3s ease; /* 버튼 호버 애니메이션 */
 }
 
 .carouselButtonLeft {

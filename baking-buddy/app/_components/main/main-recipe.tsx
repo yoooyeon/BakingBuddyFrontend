@@ -1,5 +1,8 @@
-import styles from '@/css/main.module.css'
-import {useState} from "react";
+"use client";
+
+import { useRouter } from 'next/navigation';
+import styles from '@/css/main.module.css';
+import { useState } from 'react';
 
 interface Writer {
     uuid: string,
@@ -24,9 +27,9 @@ interface Recipe {
     writer: Writer;
 }
 
-
-const MainRecipe = ({recipes}) => {
+const MainRecipe = ({ recipes }: { recipes: Recipe[] }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const router = useRouter(); // useRouter 훅을 사용하여 내비게이션
 
     const nextRecipe = () => {
         setCurrentIndex((prevIndex) =>
@@ -39,16 +42,21 @@ const MainRecipe = ({recipes}) => {
             prevIndex === 0 ? recipes.length - 1 : prevIndex - 1
         );
     };
-    console.log(recipes)
 
     const currentRecipe = recipes[currentIndex];
+
+    // 클릭 핸들러 함수
+    const handleClick = () => {
+        router.push(`/recipes/${currentRecipe.id}`); // Next.js 내비게이션 사용
+    };
+
     return (
         <div className={styles.carouselContainer}>
-            <div className={styles.carousel}>
+            <div className={styles.carousel} onClick={handleClick}>
                 <div className={styles.carouselImageWrapper}>
                     <img
-                        // src={currentRecipe.recipeImageUrl || "https://picsum.photos/seed/picsum/200/300"}
-                        src={"https://picsum.photos/seed/picsum/400/300"}
+                        // src={currentRecipe.recipeImageUrl || "https://picsum.photos/seed/picsum/400/300"}
+                        src={ "https://picsum.photos/seed/picsum/400/300"}
                         alt={currentRecipe.name || "Main Recipe"}
                         className={styles.carouselImage}
                     />

@@ -4,14 +4,12 @@ import {useParams} from 'next/navigation';
 import Link from 'next/link';
 import Tag from '@/app/_components/recipe/tag';
 import {API_URL} from '@/app/constants';
-import {Stomp, IFrame} from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
-import styles from '@/css/form.module.css';
-// import Review from '@/app/_components/review/review';
+import styles from '@/css/form.module.css'; // 스타일 import
 import ReviewForm from '@/app/_components/review/review-form';
-import UserCountPopup from "@/app/_components/popup/uesr-count-popup"; // Import the ReviewForm component
-const Review = lazy(() => import('@/app/_components/review/review')); // Lazy load Review component
+import UserCountPopup from "@/app/_components/popup/uesr-count-popup";
+import Slider from 'react-slick'; // react-slick import
 
+const Review = lazy(() => import('@/app/_components/review/review'));
 const RecipeDetails = lazy(() => import('@/app/_components/recipe/recipe-detail'));
 const IngredientsTable = lazy(() => import('@/app/_components/recipe/ingredients-table'));
 const RecipeSteps = lazy(() => import('@/app/_components/recipe/recipe-steps'));
@@ -29,7 +27,7 @@ interface ReviewProp {
 interface Recipe {
     id: string;
     name: string;
-    username: string; // 레시피 작성자
+    username: string;
     likeCount: number;
     level: string;
     userLiked: boolean;
@@ -60,13 +58,10 @@ export default function RecipeDetailPage() {
     const [product, setProduct] = useState<Product[] | null>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    // const [reviews, setReviews] = useState<ReviewProp[]>([]);
     const [reviews, setReviews] = useState<ReviewProp[]>([]);
-    // 접속자 체크
     const [userCount, setUserCount] = useState(0);
-    const [showPopup, setShowPopup] = useState(false); // 팝업 표시 여부
+    const [showPopup, setShowPopup] = useState(false);
 
-    // const socketUrl = `${API_URL}/ws`; // Spring Boot WebSocket endpoint
     const getToken = () => localStorage.getItem('accessToken');
 
     const handleDelete = async () => {
@@ -140,6 +135,7 @@ export default function RecipeDetailPage() {
             console.error((err as Error).message);
         }
     };
+
     const fetchProduct = async () => {
         try {
             const response = await fetch(`${API_URL}/api/recommendations/recipes/${recipeId}`, {
@@ -154,45 +150,16 @@ export default function RecipeDetailPage() {
             }
             const json = await response.json();
             const data = json.data;
-            console.log("recom",data)
-            setProduct(data)
+            console.log("recom", data);
+            setProduct(data);
         } catch (err) {
             console.error((err as Error).message);
         }
-    }
+    };
+
     const handleReviewSubmitted = () => {
         fetchReview(); // 리뷰 제출 후 리뷰 리스트를 새로 고칩니다.
     };
-
-    // useEffect(() => {
-    //     const accessToken = getToken();
-    //     const headers = {
-    //         Authorization: accessToken ? `Bearer ${accessToken}` : '',
-    //     };
-    //     const socket = new SockJS(socketUrl);
-    //     const client = Stomp.over(socket);
-    //
-    //     client.connect(headers, (frame: IFrame) => {
-    //         console.log('Connected: ' + frame);
-    //         client.subscribe('/topic/onlineUsers', (message) => {
-    //             const body = message.body;
-    //             console.log('Received user count:', body);
-    //             setUserCount(parseInt(body, 10)); // Update the state with new user count
-    //             setShowPopup(true); // 팝업을 표시
-    //         });
-    //         client.send('/app/userConnected', {}, '');
-    //     }, (error: unknown) => {
-    //         console.error('STOMP Error:', error);
-    //     });
-    //
-    //     return () => {
-    //         if (client.connected) {
-    //             client.send('/app/userDisconnected', {}, '');
-    //         } else {
-    //             console.log('No STOMP connection to send disconnection message');
-    //         }
-    //     };
-    // }, []);
 
     useEffect(() => {
         fetchRecipe();
@@ -211,6 +178,32 @@ export default function RecipeDetailPage() {
     if (!recipe) {
         return <div>No recipe data available</div>;
     }
+
+    // Slider 설정
+    const settings = {
+        dots: true,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        arrows: true, // 화살표 활성화
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                },
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                },
+            },
+        ],
+    };
 
     return (
         <div className="max-w-2xl mx-auto p-4 space-y-4">
@@ -233,25 +226,22 @@ export default function RecipeDetailPage() {
                 <Review reviews={reviews}/>
             </Suspense>
             <ReviewForm recipeId={recipeId} onReviewSubmit={handleReviewSubmitted}/>
-            <Suspense fallback={<h1>Loading products...</h1>}>
-                {product && product.map((prod) => (
-                    <Product key={prod.id} product={prod} />
-                ))}
-            </Suspense>
-            {loginUsername === recipe.username && (
-                <div className={styles.buttonContainer}>
-                    <Link href={`/recipes/${recipeId}/edit`}>
-                        <button className={styles.button}>레시피 수정하기</button>
-                    </Link>
-                    <button
-                        onClick={handleDelete}
-                        disabled={isDeleting}
-                        className={styles.button}
-                    >
-                        {isDeleting ? '삭제중...' : '삭제하기'}
-                    </button>
-                </div>
-            )}
+            <div className="mt-8">
+                {
+                    product?.length > 0 && (
+                        <h2 className="text-xl font-semibold mb-4">관련 상품</h2>
+                    )
+                }
+                <Slider {...settings}>
+                    {product && product.map((prod) => (
+                        <div key={prod.id} className="px-2">
+                            <Suspense fallback={<h1>Loading product...</h1>}>
+                                <Product product={prod}/>
+                            </Suspense>
+                        </div>
+                    ))}
+                </Slider>
+            </div>
         </div>
     );
 }
