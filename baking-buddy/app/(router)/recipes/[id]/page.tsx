@@ -227,11 +227,8 @@ export default function RecipeDetailPage() {
             </Suspense>
             <ReviewForm recipeId={recipeId} onReviewSubmit={handleReviewSubmitted}/>
             <div className="mt-8">
-                {
-                    product?.length > 0 && (
-                        <h2 className="text-xl font-semibold mb-4">관련 상품</h2>
-                    )
-                }
+                <h2 className="text-xl font-semibold mb-4">관련 상품</h2>
+
                 <Slider {...settings}>
                     {product && product.map((prod) => (
                         <div key={prod.id} className="px-2">

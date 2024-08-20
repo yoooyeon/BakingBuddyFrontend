@@ -34,7 +34,7 @@ const ReportPage = () => {
         fetchReports();
     }, []);
 
-    const handleApprove = async (id: number) => {
+    const handleApprove = async (id: string) => {
         try {
             await fetch(`${API_URL}/api/admin/reports/${id}`, {
                 method: 'POST',
@@ -44,13 +44,12 @@ const ReportPage = () => {
                 credentials: 'include'
             });
 
-            // Update the status of the approved report in the state
+            // Update the report status after successful approval
             setReports(prev =>
                 prev.map(report =>
                     report.id === id ? { ...report, isCompleted: true } : report
                 )
             );
-
             alert('Report approved!');
         } catch (error) {
             console.error('Error approving report:', error);

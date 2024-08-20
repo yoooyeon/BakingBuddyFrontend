@@ -13,7 +13,8 @@ interface AuthContextType {
     setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
     login: (username: string, password: string) => void;
     logout: () => void;
-    setRole: React.Dispatch<React.SetStateAction<string | null>>;
+    role: 'ADMIN' | 'EDITOR' | 'SELLER' | null;
+    setRole: React.Dispatch<React.SetStateAction<'ADMIN' | 'EDITOR' | 'SELLER' | null>>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,7 +23,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const router = useRouter();
 
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-    const [role, setRole] = useState<string | null>(null);
+    const [role, setRole] = useState<'ADMIN' | 'EDITOR' | 'SELLER' | null>(null);  // Updated type
 
     useEffect(() => {
         const checkAuthStatus = async () => {
