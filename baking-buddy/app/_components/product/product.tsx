@@ -6,7 +6,7 @@ interface ProductParam {
     name: string;
     price: number;
     description: string;
-    link: string;
+    link?: string;
     productImageUrl: string;
 }
 
@@ -14,8 +14,6 @@ const Product = ({product}: { product: ProductParam }) => {
     return (
         <Link href={`/products/${product.id}`}>
             <div className={styles.productCard}>
-                {/*<img className={styles.productImage} src="https://picsum.photos/seed/picsum/200/300"*/}
-                {/*     alt={product.name}/>*/}
                 <img className={styles.productImage} src={product.productImageUrl} alt='이미지' />
                 <h3 className={styles.productName}>{product.name}</h3>
                 <p className={styles.productDescription}>{product.description}</p>

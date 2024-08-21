@@ -47,6 +47,7 @@ interface Product {
     price: number;
     description: string;
     productImageUrl: string;
+    link?: string;
 }
 
 export default function RecipeDetailPage() {
