@@ -65,7 +65,6 @@ const RecipePage = () => {
         })
             .then((response) => {
                 const data = response.data.data;
-                console.log(data)
                 setMainRecipes(Array.isArray(data) ? data : []);
             })
             .catch((error) => {
@@ -107,7 +106,7 @@ const RecipePage = () => {
                     ) : (<div></div>)}
 
                     < div className="mt-8">
-                        <h2 className="text-2xl font-bold mb-4">Latest Recipes</h2>
+                        <h2 className="text-2xl font-bold mb-4">최근 레시피</h2>
                         <div className="relative">
                             <div className="absolute left-0 top-1/2 transform -translate-y-1/2">
                                 <button onClick={handlePreviousPage} disabled={currentPage === 0}
@@ -158,6 +157,14 @@ const RecipePage = () => {
                                 </button>
                             </div>
                         </div>
+                    </div>
+                    < div className="mt-8">
+                        <h2 className="text-2xl font-bold mb-4">인기 레시피</h2>
+
+                    </div>
+                    < div className="mt-8">
+                        <h2 className="text-2xl font-bold mb-4">내가 팔로우 한 에디터의 레시피</h2>
+
                     </div>
                 </section>
             </main>

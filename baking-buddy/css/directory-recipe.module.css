@@ -1,6 +1,9 @@
+/* directory-recipe.module.css */
+
 .container {
-  padding: 16px;
-  margin: 16px;
+  margin: 0 auto; /* 가운데 정렬 */
+  padding: 16px; /* 패딩 추가 */
+  width: 90%;
 }
 
 .directoryGrid {

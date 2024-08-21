@@ -1,7 +1,7 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import styles from "@/css/user-profile.module.css";
-import {API_URL} from "@/app/constants";
-import {useParams} from "next/navigation";
+import { API_URL } from "@/app/constants";
+import { useParams } from "next/navigation";
 
 interface UserProfileProps {
     username: string;
@@ -11,7 +11,7 @@ interface UserProfileProps {
     uuid: string;
 }
 
-const UserIntro = ({userProfile}: { userProfile: UserProfileProps }) => {
+const UserIntro = ({ userProfile }: { userProfile: UserProfileProps }) => {
     const [isFollowing, setIsFollowing] = useState(false);
     const params = useParams();
     const uuid = params.uuid as string;
@@ -55,7 +55,6 @@ const UserIntro = ({userProfile}: { userProfile: UserProfileProps }) => {
             });
             if (response.ok) {
                 const result = await response.json();
-                console.log(`${isFollowing ? 'unfollow' : 'follow'}=`, result.message);
                 setIsFollowing(!isFollowing);
             } else {
                 console.error(`Error ${isFollowing ? 'unfollowing' : 'following'}:`, response.statusText);
@@ -69,28 +68,29 @@ const UserIntro = ({userProfile}: { userProfile: UserProfileProps }) => {
 
     return (
         <div className={styles.container}>
-            {/*프로필 */}
             <div className={styles.profileHeader}>
                 <img
                     src={userProfile.profileImageUrl || "/placeholder-user.jpg"}
                     alt={userProfile.username}
                     className={styles.profileImage}
                 />
-                <h1 className={styles.username}>{userProfile.nickname || userProfile.username}</h1>
-                <p className={styles.introduction}>
-                    {userProfile.introduction || "소개글이 아직 없습니다."}
-                </p>
-                <button
-                    className={`${styles.followButton} ${isFollowing ? styles.following : styles.notFollowing}`}
-                    onClick={handleFollowClick}
-                    disabled={loading}
-                >
-                    {isFollowing ? 'Unfollow' : 'Follow'}
-                </button>
-            </div>
-            {/*레시피*/}
-            <div>
-
+                <div className={styles.profileDetails}>
+                    <h1 className={styles.username}>{userProfile.nickname || userProfile.username}</h1>
+                    <div className={styles.profileTextAndButton}>
+                        <p className={styles.introduction}>
+                            {userProfile.introduction || "소개글이 아직 없습니다."}
+                        </p>
+                        <div className={styles.followButtonContainer}>
+                            <button
+                                className={`${styles.followButton} ${isFollowing ? styles.following : styles.notFollowing}`}
+                                onClick={handleFollowClick}
+                                disabled={loading}
+                            >
+                                {isFollowing ? 'Unfollow' : 'Follow'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

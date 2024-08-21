@@ -35,9 +35,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
                 if (response.ok) {
                     const result = await response.json();
                     const data = result.data;
-                    console.log(data)
                     const isAuth = data.authenticated;
-                    console.log("isAuth",isAuth)
                     const role = data.roleType;
                     setRole(role);
                     setIsLoggedIn(isAuth);

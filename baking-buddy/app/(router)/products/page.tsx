@@ -1,13 +1,15 @@
 "use client";
-import {useEffect, useState} from "react";
-import {API_URL} from "@/app/constants";
+import { useEffect, useState } from "react";
+import { API_URL } from "@/app/constants";
 import Product from "@/app/_components/product/product";
+import styles from '@/css/product-list.module.css';
 
 interface ProductParam {
     id: string;
     name: string;
     price: number;
     description: string;
+    link: string;
     productImageUrl: string;
 }
 
@@ -55,9 +57,9 @@ const ProductPage = () => {
     }
 
     return (
-        <div>
+        <div className={styles.productGrid}>
             {products.map((product) => (
-                <Product key={product.id} product={product}/>
+                <Product key={product.id} product={product} />
             ))}
         </div>
     );

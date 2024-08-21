@@ -55,8 +55,8 @@ const MainRecipe = ({ recipes }: { recipes: Recipe[] }) => {
             <div className={styles.carousel} onClick={handleClick}>
                 <div className={styles.carouselImageWrapper}>
                     <img
-                        // src={currentRecipe.recipeImageUrl || "https://picsum.photos/seed/picsum/400/300"}
-                        src={ "https://picsum.photos/seed/picsum/400/300"}
+                        src={currentRecipe.recipeImageUrl || "https://picsum.photos/seed/picsum/400/300"}
+                        // src={ "https://picsum.photos/seed/picsum/400/300"}
                         alt={currentRecipe.name || "Main Recipe"}
                         className={styles.carouselImage}
                     />

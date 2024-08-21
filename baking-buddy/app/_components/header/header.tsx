@@ -23,7 +23,7 @@ const Header = () => {
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
     const [alarms, setAlarms] = useState<AlarmType[]>([]);
     const [hasUnreadAlarms, setHasUnreadAlarms] = useState<boolean>(false);
-
+    const [loading, setLoading] = useState(true);
     const alarmRef = useRef<HTMLDivElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
@@ -39,6 +39,7 @@ const Header = () => {
                 if (response.ok) {
                     const result = await response.json();
                     const status = result.data.isAuthenticated;
+
                     setIsLoggedIn(status);
                 } else {
                     if (response.status === 401) {
@@ -60,6 +61,7 @@ const Header = () => {
                         }
                     }
                     setIsLoggedIn(false);
+                    router.push("/login")
                 }
             } catch (error) {
                 console.error('Error checking authentication status:', error);

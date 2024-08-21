@@ -150,7 +150,6 @@ export default function RecipeDetailPage() {
             }
             const json = await response.json();
             const data = json.data;
-            console.log("recom", data);
             setProduct(data);
         } catch (err) {
             console.error((err as Error).message);
@@ -227,7 +226,7 @@ export default function RecipeDetailPage() {
             </Suspense>
             <ReviewForm recipeId={recipeId} onReviewSubmit={handleReviewSubmitted}/>
             <div className="mt-8">
-                <h2 className="text-xl font-semibold mb-4">관련 상품</h2>
+                <h2 className="text-xl font-semibold mb-4">레시피에 필요한 재료</h2>
 
                 <Slider {...settings}>
                     {product && product.map((prod) => (

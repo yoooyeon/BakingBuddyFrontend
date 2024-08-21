@@ -1,9 +1,6 @@
-"use client";
-
 import { useState, useEffect } from 'react';
-import Directory from '../recipe/directory';
-import styles from '@/css/directory-recipe.module.css';
 import DirectoryCarousel from "@/app/_components/recipe/directory-carousel";
+import styles from '@/css/directory-recipe.module.css';
 
 interface RecipeResponseDto {
     id: number;

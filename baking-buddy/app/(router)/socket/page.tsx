@@ -26,7 +26,6 @@ const SocketPage = () => {
             // Subscribe to the topic to get the user count updates
             client.subscribe('/topic/onlineUsers', (message) => {
                 const body = message.body;
-                console.log('Received user count:', body);
                 setUserCount(parseInt(body, 10)); // Update the state with new user count
             });
 

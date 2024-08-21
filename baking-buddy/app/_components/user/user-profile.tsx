@@ -38,6 +38,7 @@ const UserProfile = () => {
         if (response.ok) {
           const json = await response.json();
           const data = json.data;
+
           setProfile(data);
           setPreview(data.profileImageUrl);
         } else {
