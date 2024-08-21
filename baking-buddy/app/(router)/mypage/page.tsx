@@ -4,6 +4,7 @@ import Modal from '@/app/_components/modal';
 import UserProfileSmall from '@/app/_components/user/user-profile-small';
 import UserProfile from '@/app/_components/user/user-profile';
 import { API_URL } from '@/app/constants';
+import styles from '@/css/mypage.module.css';
 
 interface User {
     username: string;
@@ -55,23 +56,23 @@ const UserProfilePage = () => {
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className={styles.loading}>Loading...</div>;
     }
 
     if (error) {
-        return <div>Error: {error}</div>;
+        return <div className={styles.error}>Error: {error}</div>;
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center bg-gray-100">
-            <div className="flex space-x-4 mt-4">
-                <div className="flex cursor-pointer" onClick={() => setFollowedModalOpen(true)}>
-                    <h2>팔로잉</h2>
-                    <p>{followedCount}</p>
+        <div className={`min-h-screen flex flex-col items-center bg-gray-100 ${styles.container}`}>
+            <div className={`flex space-x-4 mt-4 ${styles.countContainer}`}>
+                <div className={styles.countItem} onClick={() => setFollowedModalOpen(true)}>
+                    <h2 className={styles.countTitle}>팔로잉</h2>
+                    <p className={styles.countNumber}>{followedCount}</p>
                 </div>
-                <div className="flex cursor-pointer" onClick={() => setFollowerModalOpen(true)}>
-                    <h2>팔로워</h2>
-                    <p>{followerCount}</p>
+                <div className={styles.countItem} onClick={() => setFollowerModalOpen(true)}>
+                    <h2 className={styles.countTitle}>팔로워</h2>
+                    <p className={styles.countNumber}>{followerCount}</p>
                 </div>
             </div>
 

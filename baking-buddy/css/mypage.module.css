@@ -1,0 +1,55 @@
+.container {
+    padding: 20px;
+    background-color: #f9fafb;
+    width: 100%;
+
+}
+
+.loading {
+    color: #555;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.error {
+    color: red;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.countContainer {
+    display: flex;
+    width: 100%;
+    max-width: 300px; /* 컨테이너의 최대 너비 설정 */
+    justify-content: center;
+    /*margin: 20px auto; !* 컨테이너를 가운데로 정렬 *!*/
+}
+.countItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    width: 45%; /* 두 항목이 같은 줄에 있도록 조정 */
+    margin: 0 10px; /* 양쪽에 여백 추가 */
+    padding: 10px; /* 패딩 추가 */
+}
+
+.countItem:hover {
+    background-color: #f1f1f1;
+}
+
+.countTitle {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.countNumber {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+}

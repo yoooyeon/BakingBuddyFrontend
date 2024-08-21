@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import styles from "../../../css/form.module.css";
+import styles from "@/css/form.module.css";
 import { API_URL } from "@/app/constants";
 import AlarmPopup from "@/app/_components/popup/alarm-popup";
 
@@ -38,7 +38,6 @@ const UserProfile = () => {
         if (response.ok) {
           const json = await response.json();
           const data = json.data;
-
           setProfile(data);
           setPreview(data.profileImageUrl);
         } else {
@@ -54,6 +53,14 @@ const UserProfile = () => {
     fetchUserProfile();
   }, []); // Empty dependency array ensures this runs only once
 
+  useEffect(() => {
+    if (file) {
+      const objectUrl = URL.createObjectURL(file);
+      setPreview(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl); // Clean up on unmount
+    }
+  }, [file]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setProfile((prevProfile) => ({
@@ -63,10 +70,9 @@ const UserProfile = () => {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFile(file);
-      setPreview(URL.createObjectURL(file));
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
     }
   };
 
@@ -90,14 +96,13 @@ const UserProfile = () => {
 
       if (response.ok) {
         setPopupMessage("프로필이 저장되었습니다.");
-        setShowPopup(true);
       } else {
         setPopupMessage("Failed to update profile");
-        setShowPopup(true);
       }
     } catch (error) {
       console.error("Error updating profile:", error);
       setPopupMessage("An error occurred while updating profile");
+    } finally {
       setShowPopup(true);
     }
   };
@@ -173,6 +178,6 @@ const UserProfile = () => {
         {showPopup && <AlarmPopup msg={popupMessage} onClose={() => setShowPopup(false)} />}
       </>
   );
-}
+};
 
 export default UserProfile;
