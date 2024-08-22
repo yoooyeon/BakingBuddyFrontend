@@ -45,19 +45,19 @@ const Review: React.FC<ReviewProps> = ({ reviews, recipeId, onReviewSubmit }) =>
                 const data = json.data;
                 setLocalReviews((prevReviews) => [data, ...prevReviews]);
                 setContent("");
-                onReviewSubmit(); // 리뷰 제출 후 부모 컴포넌트에 알림
+                onReviewSubmit(); // 댓글 제출 후 부모 컴포넌트에 알림
             } else {
-                setError("리뷰 작성에 실패했습니다.");
+                setError("댓글 작성에 실패했습니다.");
             }
         } catch (err) {
-            console.error("리뷰 작성 오류:", err);
-            setError("리뷰 작성 중 오류가 발생했습니다.");
+            console.error("댓글 작성 오류:", err);
+            setError("댓글 작성 중 오류가 발생했습니다.");
         }
     };
 
     return (
         <div className={styles.reviewsContainer}>
-            <h3 className={styles.reviewsTitle}>리뷰</h3>
+            <h3 className={styles.reviewsTitle}>댓글</h3>
             <form onSubmit={(e) => {
                 e.preventDefault();
                 handleReviewSubmit();

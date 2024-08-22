@@ -4,7 +4,7 @@ import { API_URL } from '@/app/constants';
 
 interface Ingredient {
     name: string;
-    amount: number;
+    amount: number | '';
     unitDisplayName: string;
 }
 
@@ -16,7 +16,7 @@ const IngredientList: React.FC<{
     const [error, setError] = useState<string | null>(null);
     const [ingredientInput, setIngredientInput] = useState({
         name: '',
-        amount: 0,
+        amount: '',
         unitDisplayName: '',  // 이 필드가 유닛을 위한 것입니다.
     });
     const [units, setUnits] = useState<string[]>([]);
@@ -54,7 +54,7 @@ const IngredientList: React.FC<{
         const { name, value } = e.target;
         setIngredientInput(prev => ({
             ...prev,
-            [name]: name === 'amount' ? Number(value) : value,
+            [name]: name === 'amount' ? (value === '' ? '' : Number(value)) : value,
         }));
     };
 
@@ -64,7 +64,7 @@ const IngredientList: React.FC<{
                 ...prevIngredients,
                 ingredientInput,
             ]);
-            setIngredientInput({ name: '', amount: 0, unitDisplayName: '' });
+            setIngredientInput({ name: '', amount: '', unitDisplayName: '' });
         }
     }, [ingredientInput, setIngredients]);
     const removeIngredient = (index: number) => {

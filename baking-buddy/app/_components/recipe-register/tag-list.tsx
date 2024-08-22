@@ -1,5 +1,5 @@
-import React, {useState, useCallback} from 'react';
-import styles from '@/css/form.module.css';
+import React, { useState, useCallback } from 'react';
+import styles from '@/css/tag.module.css';
 
 const TagList: React.FC<{ tags: string[], setTags: React.Dispatch<React.SetStateAction<string[]>> }> = ({
                                                                                                             tags,
@@ -7,28 +7,29 @@ const TagList: React.FC<{ tags: string[], setTags: React.Dispatch<React.SetState
                                                                                                         }) => {
     const [tagInput, setTagInput] = useState<string>('');
 
-    // 중복 호출 방지
     const addTag = useCallback(() => {
-        if (tagInput.trim() !== '') {
-            setTags(prevTags => {
-                if (!prevTags.includes(tagInput.trim())) {
-                    return [...prevTags, tagInput.trim()];
-                }
-                return prevTags;
-            });
+        const trimmedTag = tagInput.trim();
+        if (trimmedTag && !tags.includes(trimmedTag)) {
+            setTags(prevTags => [...prevTags, trimmedTag]);
             setTagInput('');
         }
-    }, [tagInput, setTags]);
+    }, [tagInput, tags, setTags]);
 
-    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter' || event.key === ',') {
-            event.preventDefault(); // Prevent form submission
+            event.preventDefault(); // Prevent default behavior
             addTag();
         }
     };
-    const removeTag = (index: number) => {
-        setTags(prev => prev.filter((_, i) => i !== index));
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setTagInput(event.target.value);
     };
+
+    const removeTag = (index: number) => {
+        setTags(prevTags => prevTags.filter((_, i) => i !== index));
+    };
+
     return (
         <div className={styles.inputGroup}>
             <label htmlFor="tagList" className={styles.label}>태그</label>
@@ -38,23 +39,20 @@ const TagList: React.FC<{ tags: string[], setTags: React.Dispatch<React.SetState
                     id="tagsInput"
                     placeholder="태그를 입력하세요"
                     value={tagInput}
-                    onChange={(e) => setTagInput(e.target.value)}
-                    onKeyDown={handleKeyPress}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
                     className={styles.input}
                 />
-                {/* <button type="button" onClick={addTag}>
-                    추가
-                </button> */}
             </div>
             <div id="tagList" className="mt-2">
                 {tags.map((tag, index) => (
-                    <span key={index}
-                          className="inline-flex items-center px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full mr-2">
-                        #{tag}
-                        <button className={styles.deleteButton} onClick={() => removeTag(index)}>×            </button>
-                    </span>
-
-
+                    <span
+                        key={index}
+                        className="inline-flex items-center px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full mr-2"
+                    >
+            #{tag}
+                        <button className={styles.deleteButton} onClick={() => removeTag(index)}>×</button>
+          </span>
                 ))}
             </div>
         </div>

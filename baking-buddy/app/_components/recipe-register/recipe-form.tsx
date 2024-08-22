@@ -6,12 +6,12 @@ import RecipeStepForm from './recipe-step-form';
 import TagList from './tag-list';
 import styles from '@/css/form.module.css';
 import { API_URL } from '@/app/constants';
-import {router} from "next/client";
+import {useRouter} from 'next/navigation';
 
 interface RecipeStep {
     stepNumber: number;
     description: string;
-    stepImage: File | null;
+    stepImage?: File | null;
 }
 
 interface Ingredient {
@@ -31,7 +31,7 @@ export default function RecipeForm() {
     const [tags, setTags] = useState<string[]>([]);
     const [recipeImage, setRecipeImage] = useState<File | null>(null);
     const [servings, setServings] = useState('');
-
+    const router = useRouter();
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -66,7 +66,6 @@ export default function RecipeForm() {
             }
 
             const responseData = await response.json();
-
             const recipeId = responseData.data.id;
 
             // Now save the steps
@@ -89,10 +88,10 @@ export default function RecipeForm() {
                 }
 
                 const stepResponseJson = await stepResponse.json();
-                const data = stepResponseJson.data
-                router.push(`/recipes/${data.id}`);
+                const data = stepResponseJson.data;
 
             }
+            router.push(`/recipes/${recipeId}`);
 
         } catch (error) {
             console.error('Error creating recipe or adding steps:', error);
@@ -119,14 +118,14 @@ export default function RecipeForm() {
             </div>
             <div>
                 <label> 기준 인분</label>
-                <input type="number" className={styles.input}  id="servings" name="servings" value={servings} onChange={(e) => setServings(e.target.value)} ></input>
+                <input type="number" className={styles.input}  id="servings" name="servings" value={servings} onChange={(e) => setServings(e.target.value)}  min="1" ></input>
             </div>
             <IngredientList ingredients={ingredients} setIngredients={setIngredients} />
             <RecipeStepForm setRecipeSteps={setRecipeSteps} />
             <TagList tags={tags} setTags={setTags} />
             <div className={styles.inputGroup}>
                 <label htmlFor="time" className={styles.label}>소요시간(분 단위)</label>
-                <input type="number" className={styles.input} id="time" name="time" value={time} onChange={(e) => setTime(e.target.value)} />
+                <input type="number" className={styles.input} id="time" name="time" value={time} onChange={(e) => setTime(e.target.value)} min="1"/>
             </div>
             <div className={styles.inputGroup}>
                 <label htmlFor="level" className={styles.label}>난이도</label>
