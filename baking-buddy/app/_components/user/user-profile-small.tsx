@@ -2,7 +2,7 @@ import React from 'react';
 import Link from "next/link";
 import styles from "@/css/user-profile-small.module.css";
 interface UserProfileSmallProps {
-    img: string;
+    img?: string;
     username: string;
     uuid: string;
 }

@@ -1,6 +1,6 @@
-// components/IngredientsTable.tsx
-import React, {useState} from 'react';
-import {Table, TableBody, TableRow, TableCell} from "@/components/ui/table";
+import React, { useState } from 'react';
+import { Table, TableBody, TableRow, TableCell } from "@/components/ui/table";
+import styles from '@/css/ingredients-table.module.css';
 
 interface Ingredient {
     name: string;
@@ -13,18 +13,22 @@ interface IngredientsTableProps {
     servings: number;
 }
 
-const IngredientsTable: React.FC<IngredientsTableProps> = ({ingredients, servings: initialServings}) => {
+const IngredientsTable: React.FC<IngredientsTableProps> = ({ ingredients, servings: initialServings }) => {
     const [servings, setServings] = useState<number>(initialServings);
     const defaultServings = initialServings;
+
+    // 양을 조정하는 함수 (소수점 첫째 자리까지 표시, .0 제거)
     const adjustAmount = (amount: string, defaultServings: number, servings: number): string => {
         const numericAmount = parseFloat(amount);
         if (isNaN(numericAmount) || defaultServings <= 0 || servings <= 0) {
-            return amount; // Return the original amount if parsing fails or servings are invalid
+            return amount; // 파싱 실패 시 원래 양을 반환
         }
-        // Adjust the amount based on the new servings
+        // 양을 새로운 인분에 맞게 조정
         const adjustedAmount = (numericAmount * servings) / defaultServings;
-        return adjustedAmount.toFixed(1);
+        // 소수점 첫째 자리까지 표시하고, .0은 제거
+        return adjustedAmount % 1 === 0 ? adjustedAmount.toFixed(0) : adjustedAmount.toFixed(1);
     };
+
     return (
         <section className="p-4 bg-white rounded-lg shadow-md">
             <h3 className="text-xl font-semibold border-b pb-2 mb-4">재료</h3>
@@ -42,8 +46,6 @@ const IngredientsTable: React.FC<IngredientsTableProps> = ({ingredients, serving
                     {ingredients.map((ingredient, index) => (
                         <TableRow key={index} className="border-b last:border-b-0">
                             <TableCell className="py-2 px-4 text-sm text-gray-700">{ingredient.name}</TableCell>
-                            <TableCell
-                                className="py-2 px-4 text-sm text-gray-500 text-right">{ingredient.amount} {ingredient.unitDisplayName}</TableCell>
                             <TableCell className="py-2 px-4 text-sm text-gray-500 text-right">
                                 {adjustAmount(ingredient.amount, defaultServings, servings)} {ingredient.unitDisplayName}
                             </TableCell>

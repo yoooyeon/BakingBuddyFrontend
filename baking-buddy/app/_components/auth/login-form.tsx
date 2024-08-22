@@ -20,7 +20,7 @@ export default function LoginForm() {
       router.push('/'); // 로그인 후 메인 페이지로 이동
       window.location.reload(); // 페이지 리로드 추가
     } catch (error) {
-      setError('Invalid login credentials.');
+      setError('아이디 또는 비밀번호가 잘못되었습니다.');
     }
   };
 

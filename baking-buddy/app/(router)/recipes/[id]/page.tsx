@@ -5,7 +5,6 @@ import Link from 'next/link';
 import Tag from '@/app/_components/recipe/tag';
 import {API_URL} from '@/app/constants';
 import styles from '@/css/form.module.css'; // 스타일 import
-import ReviewForm from '@/app/_components/review/review-form';
 import UserCountPopup from "@/app/_components/popup/uesr-count-popup";
 import Slider from 'react-slick'; // react-slick import
 
@@ -39,6 +38,8 @@ interface Recipe {
     tags: { name: string }[];
     reviews: ReviewProp[];
     servings: number;
+    videoId?: string;
+    uuid?:string;
 }
 
 interface Product {
@@ -64,6 +65,7 @@ export default function RecipeDetailPage() {
     const [showPopup, setShowPopup] = useState(false);
 
     const getToken = () => localStorage.getItem('accessToken');
+
 
     const handleDelete = async () => {
         if (!recipe) {
@@ -110,6 +112,7 @@ export default function RecipeDetailPage() {
             }
             const json = await response.json();
             const data = json.data;
+
             setRecipe(data);
             setLoading(false);
         } catch (err) {
@@ -131,7 +134,8 @@ export default function RecipeDetailPage() {
                 throw new Error('Network response was not ok');
             }
             const json = await response.json();
-            setReviews(json.data);
+            const data = json.data;
+            setReviews(data);
         } catch (err) {
             console.error((err as Error).message);
         }
@@ -211,6 +215,19 @@ export default function RecipeDetailPage() {
             <Suspense fallback={<h1>Loading recipe details...</h1>}>
                 <RecipeDetails recipe={recipe}/>
             </Suspense>
+            {recipe.videoId && (
+                <>
+                    <span>·</span>
+                    <div className={styles.videoWrapper}>
+                        <iframe width="100%" height="315"
+                                src="https://www.youtube.com/embed/tVIXY14aJms?si=CP8y_61QIF_pPYfG"
+                                title="YouTube video player" frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerPolicy="strict-origin-when-cross-origin" allowFullScreen=""></iframe>
+
+                    </div>
+                </>
+            )}
             <Suspense fallback={<h1>Loading ingredients...</h1>}>
                 <IngredientsTable ingredients={recipe.ingredients || []} servings={recipe.servings}/>
             </Suspense>
@@ -223,9 +240,8 @@ export default function RecipeDetailPage() {
                 ))}
             </Suspense>
             <Suspense fallback={<h1>Loading reviews...</h1>}>
-                <Review reviews={reviews}/>
+                <Review reviews={reviews} recipeId={recipeId} onReviewSubmit={handleReviewSubmitted}/>
             </Suspense>
-            <ReviewForm recipeId={recipeId} onReviewSubmit={handleReviewSubmitted}/>
             <div className="mt-8">
                 <h2 className="text-xl font-semibold mb-4">레시피에 필요한 재료</h2>
 
