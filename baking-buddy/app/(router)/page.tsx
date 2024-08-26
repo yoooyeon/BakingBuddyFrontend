@@ -10,7 +10,7 @@ import UserProfileSmall from "@/app/_components/user/user-profile-small";
 
 interface Ingredient {
     name: string;
-    amount: string;
+    amount: number | '';
 }
 
 interface RecipeStep {

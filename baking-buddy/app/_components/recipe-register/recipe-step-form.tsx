@@ -4,7 +4,7 @@ import styles from '@/css/form.module.css';
 interface RecipeStep {
     stepNumber: number;
     description: string;
-    stepImage: File | null;
+    stepImage?: File | null;
 }
 
 const RecipeStepForm: React.FC<{ setRecipeSteps: React.Dispatch<React.SetStateAction<RecipeStep[]>> }> = ({ setRecipeSteps }) => {

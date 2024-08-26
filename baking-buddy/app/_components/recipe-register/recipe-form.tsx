@@ -2,11 +2,11 @@
 import React, { useState } from 'react';
 import DirectorySelect from './directory-select';
 import IngredientList from './ingredient-list';
-import RecipeStepForm from './recipe-step-form';
 import TagList from './tag-list';
 import styles from '@/css/form.module.css';
 import { API_URL } from '@/app/constants';
 import {useRouter} from 'next/navigation';
+import RecipeStepForm from "@/app/_components/recipe-register/recipe-step-form";
 
 interface RecipeStep {
     stepNumber: number;
@@ -16,7 +16,7 @@ interface RecipeStep {
 
 interface Ingredient {
     name: string,
-    amount: number,
+    amount: number | '',
     unitDisplayName: string,
 }
 export default function RecipeForm() {

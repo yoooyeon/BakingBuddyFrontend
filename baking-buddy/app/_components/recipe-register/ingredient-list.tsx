@@ -62,7 +62,7 @@ const IngredientList: React.FC<{
         if (ingredientInput.name.trim() !== '' && ingredientInput.unitDisplayName.trim() !== '') {
             setIngredients(prevIngredients => [
                 ...prevIngredients,
-                ingredientInput,
+                ingredientInput as Ingredient,
             ]);
             setIngredientInput({ name: '', amount: '', unitDisplayName: '' });
         }

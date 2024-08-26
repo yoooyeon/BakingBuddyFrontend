@@ -17,7 +17,7 @@ interface RecipeStep {
 
 interface Ingredient {
     name: string;
-    amount: number;
+    amount: number | '';
     unitDisplayName: string;
 }
 

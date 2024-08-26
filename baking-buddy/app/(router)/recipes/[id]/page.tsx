@@ -33,7 +33,7 @@ interface Recipe {
     time: number;
     recipeImageUrl: string;
     profileImageUrl: string;
-    ingredients: { name: string; amount: string; unitDisplayName: string }[];
+    ingredients: { name: string; amount: number | ''; unitDisplayName: string }[];
     recipeSteps: { stepNumber: string; stepImage: string; description: string }[];
     tags: { name: string }[];
     reviews: ReviewProp[];
@@ -223,7 +223,7 @@ export default function RecipeDetailPage() {
                                 src="https://www.youtube.com/embed/tVIXY14aJms?si=CP8y_61QIF_pPYfG"
                                 title="YouTube video player" frameBorder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerPolicy="strict-origin-when-cross-origin" allowFullScreen=""></iframe>
+                                referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
 
                     </div>
                 </>

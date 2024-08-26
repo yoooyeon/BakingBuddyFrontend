@@ -4,7 +4,7 @@ import styles from '@/css/ingredients-table.module.css';
 
 interface Ingredient {
     name: string;
-    amount: string;
+    amount: number | '';
     unitDisplayName: string;
 }
 
@@ -18,10 +18,11 @@ const IngredientsTable: React.FC<IngredientsTableProps> = ({ ingredients, servin
     const defaultServings = initialServings;
 
     // 양을 조정하는 함수 (소수점 첫째 자리까지 표시, .0 제거)
-    const adjustAmount = (amount: string, defaultServings: number, servings: number): string => {
-        const numericAmount = parseFloat(amount);
-        if (isNaN(numericAmount) || defaultServings <= 0 || servings <= 0) {
-            return amount; // 파싱 실패 시 원래 양을 반환
+    const adjustAmount = (amount: number | '', defaultServings: number, servings: number): string => {
+        const numericAmount = typeof amount === 'number' ? amount : parseFloat(amount);
+
+        if (isNaN(numericAmount)) {
+            return ''; // Return empty string or handle the error as needed
         }
         // 양을 새로운 인분에 맞게 조정
         const adjustedAmount = (numericAmount * servings) / defaultServings;

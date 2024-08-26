@@ -4,7 +4,7 @@ import { API_URL } from '@/app/constants';
 
 interface Ingredient {
     name: string;
-    amount: number;
+    amount: number | '';
     unitDisplayName: string;
 }
 

@@ -8,7 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 interface Ingredient {
   name: string;
-  amount: string;
+  amount: number | '';
 }
 
 interface RecipeStep {
