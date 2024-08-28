@@ -67,26 +67,33 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
                 credentials: 'include', // 쿠키 포함
             });
 
+            // HTTP 상태 코드로 오류를 구분
             if (!response.ok) {
-                throw new Error('로그인 실패');
+                if (response.status >= 500) {
+                    // 500번대 오류: 서버 통신 오류
+                    throw new Error('서버 통신 오류');
+                } else if (response.status >= 400) {
+                    // 400번대 오류: 로그인 실패
+                    throw new Error('로그인 실패: 아이디나 비밀번호를 확인해주세요.');
+                } else {
+                    // 기타 오류
+                    throw new Error('알 수 없는 오류가 발생했습니다.');
+                }
             } else {
                 const json = await response.json();
-                const data = json.data
+                const data = json.data;
                 const role = data.roleType;
-                alert("login" + role)
+                alert("login" + role);
 
                 setIsLoggedIn(true);
                 setRole(role);
                 return json;
             }
-
-
         } catch (error) {
-            console.error('로그인 오류:', error);
-            throw error;
+            console.error((error as Error).message);
+            throw error; // 필요한 경우 에러를 다시 던져 호출한 쪽에서 처리할 수 있도록 함
         }
     };
-
 
     const logout = async () => {
         try {
