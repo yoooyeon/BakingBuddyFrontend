@@ -1,4 +1,4 @@
-# Baking Buddy Frontend
+# Baking Buddy Frontend
 
 ### 레시피를 공유하고 추천하는 웹 애플리케이션
 
