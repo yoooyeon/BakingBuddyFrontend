@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import styles from "@/css/user-profile.module.css";
 import { API_URL } from "@/app/constants";
 import { useParams } from "next/navigation";
 
@@ -67,22 +66,22 @@ const UserIntro = ({ userProfile }: { userProfile: UserProfileProps }) => {
     };
 
     return (
-        <div className={styles.container}>
-            <div className={styles.profileHeader}>
+        <div className="max-w-2xl mx-auto p-4 bg-white shadow-md rounded-lg">
+            <div className="flex items-start gap-4">
                 <img
                     src={userProfile.profileImageUrl || "/placeholder-user.jpg"}
                     alt={userProfile.username}
-                    className={styles.profileImage}
+                    className="w-20 h-20 rounded-full object-cover"
                 />
-                <div className={styles.profileDetails}>
-                    <h1 className={styles.username}>{userProfile.nickname || userProfile.username}</h1>
-                    <div className={styles.profileTextAndButton}>
-                        <p className={styles.introduction}>
+                <div className="flex flex-col flex-1">
+                    <h1 className="text-2xl font-bold mb-2">{userProfile.nickname || userProfile.username}</h1>
+                    <div className="flex flex-col">
+                        <p className="text-lg mb-4">
                             {userProfile.introduction || "소개글이 아직 없습니다."}
                         </p>
-                        <div className={styles.followButtonContainer}>
+                        <div className="flex justify-end">
                             <button
-                                className={`${styles.followButton} ${isFollowing ? styles.following : styles.notFollowing}`}
+                                className={`px-4 py-2 rounded text-lg transition-colors duration-300 ${isFollowing ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700'}`}
                                 onClick={handleFollowClick}
                                 disabled={loading}
                             >

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Table, TableBody, TableRow, TableCell } from "@/components/ui/table";
-import styles from '@/css/ingredients-table.module.css';
 
 interface Ingredient {
     name: string;

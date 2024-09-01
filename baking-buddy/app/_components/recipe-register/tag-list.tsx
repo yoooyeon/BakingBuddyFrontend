@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import styles from '@/css/tag.module.css';
 
 const TagList: React.FC<{ tags: string[], setTags: React.Dispatch<React.SetStateAction<string[]>> }> = ({
                                                                                                             tags,
@@ -17,7 +16,7 @@ const TagList: React.FC<{ tags: string[], setTags: React.Dispatch<React.SetState
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter' || event.key === ',') {
-            event.preventDefault(); // Prevent default behavior
+            event.preventDefault();
             addTag();
         }
     };
@@ -31,8 +30,8 @@ const TagList: React.FC<{ tags: string[], setTags: React.Dispatch<React.SetState
     };
 
     return (
-        <div className={styles.inputGroup}>
-            <label htmlFor="tagList" className={styles.label}>태그</label>
+        <div className="mb-6">
+            <label htmlFor="tagList" className="block text-gray-700 font-bold mb-2 text-lg">태그</label>
             <div>
                 <input
                     type="text"
@@ -41,7 +40,7 @@ const TagList: React.FC<{ tags: string[], setTags: React.Dispatch<React.SetState
                     value={tagInput}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
-                    className={styles.input}
+                    className="mt-1 p-2.5 border border-gray-300 rounded-md w-full text-sm outline-none focus:border-blue-400 focus:ring focus:ring-blue-200 transition"
                 />
             </div>
             <div id="tagList" className="mt-2">
@@ -50,9 +49,14 @@ const TagList: React.FC<{ tags: string[], setTags: React.Dispatch<React.SetState
                         key={index}
                         className="inline-flex items-center px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full mr-2"
                     >
-            #{tag}
-                        <button className={styles.deleteButton} onClick={() => removeTag(index)}>×</button>
-          </span>
+                        #{tag}
+                        <button
+                            className="ml-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-700"
+                            onClick={() => removeTag(index)}
+                        >
+                            ×
+                        </button>
+                    </span>
                 ))}
             </div>
         </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from "next/link";
-import styles from "@/css/user-profile-small.module.css";
+
 interface UserProfileSmallProps {
     img?: string;
     username: string;
@@ -9,10 +9,16 @@ interface UserProfileSmallProps {
 
 const UserProfileSmall: React.FC<UserProfileSmallProps> = ({ img, username, uuid }) => {
     return (
-        <Link href={`/user/${uuid}`} >
-            <div className={styles.container}>
-                <img src={img} alt={username} className={styles.profileImage} />
-                <div className={styles.username}>{username}</div>
+        <Link href={`/user/${uuid}`}>
+            <div className="flex items-center space-x-2 p-2 rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105">
+                <img
+                    src={img}
+                    alt={username}
+                    className="w-8 h-8 rounded-full object-cover transition-transform duration-300 hover:scale-120"
+                />
+                <div className="text-sm text-gray-800 transition-all duration-300 hover:text-base">
+                    {username}
+                </div>
             </div>
         </Link>
     );
